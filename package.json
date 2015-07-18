@@ -1,0 +1,34 @@
+{
+  "name": "crowdstart-analytics",
+  "version": "0.0.1",
+  "description": "Analytics support for Crowdstart.",
+  "main": "index.js",
+  "dependencies": {
+    "analytics.js-core": "git://github.com/segmentio/analytics.js-core.git"
+  },
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "coffee-script": "^1.9.1",
+    "executive": "^0.4.7",
+    "mocha": "^2.2.1",
+    "postmortem": "^0.1.8",
+    "requisite": "^1.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crowdstart/analytics.git"
+  },
+  "keywords": [
+    "analytics",
+    "crowdstart"
+  ],
+  "author": "\"author\": \"Zach Kelling <zk@crowdstart.com> (http://zeekay.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crowdstart/analytics/issues"
+  },
+  "homepage": "https://github.com/crowdstart/analytics#readme"
+}
