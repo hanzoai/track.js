@@ -3,9 +3,6 @@
   "version": "0.0.2",
   "description": "Analytics support for Crowdstart.",
   "main": "lib",
-  "optionalDependencies": {
-    "phantomjs2": "^2.0.0"
-  },
   "devDependencies": {
     "bebop": "^1.3.6",
     "cake": "^0.1.1",
