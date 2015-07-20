@@ -19,6 +19,7 @@
     "webdriverio": "^2.4.5"
   },
   "scripts": {
+    "prepublish": "cake build",
     "test": "cake test"
   },
   "repository": {
