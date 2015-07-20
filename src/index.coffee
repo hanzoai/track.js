@@ -1,4 +1,4 @@
 module.exports =
   Analytics: require './analytics'
-  Facebook: require './facebook'
-  Google: require './google'
+  Facebook: require './integrations/facebook'
+  Google: require './integrations/google'

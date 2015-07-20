@@ -52,11 +52,16 @@ module.exports = class Analytics
     console?.log.apply @, arguments if @_debug
 
   # Un-implemented
-  alias: (userId, previousId, options, callback) ->
-  reset: ->
-  ready: ->
-  user: ->
+  alias: ->
   group: ->
   load: ->
-  on: (event, cb) ->
-    # cb expects `function(event, properties, options)`
+  off: ->
+  on: ->
+  once: ->
+  ready: ->
+  reset: ->
+  trackClick: ->
+  trackForm: ->
+  trackLink: ->
+  trackSubmit: ->
+  user: ->
