@@ -2,7 +2,7 @@
   "name": "crowdstart-analytics",
   "version": "0.0.1",
   "description": "Analytics support for Crowdstart.",
-  "main": "index.js",
+  "main": "lib",
   "optionalDependencies": {
     "phantomjs2": "^2.0.0"
   },
