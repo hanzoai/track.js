@@ -1,4 +1,4 @@
-class Google
+module.exports = class Google
   constructor: (@opts) ->
 
   init: ->
@@ -25,6 +25,7 @@ class Google
       page:  opts.page
       title: opts.title
 
+  # Ecommerce methods
   viewedProductCategory: (event, properties, options, cb) ->
   viewedProduct:         (event, properties, options, cb) ->
   addedProduct:          (event, properties, options, cb) ->
