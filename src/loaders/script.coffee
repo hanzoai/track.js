@@ -1,7 +1,7 @@
 {onload} = require '../utils'
 
 module.exports = (opts, cb=->) ->
-  script = document.createElement('script')
+  script = document.createElement 'script'
   onload script, cb
 
   script.type = opts.type or 'text/javascript'
