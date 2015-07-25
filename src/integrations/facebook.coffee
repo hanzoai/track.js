@@ -21,7 +21,7 @@ module.exports = class Facebook
       s.parentNode.insertBefore t, s
       return
 
-    fbq 'init', @opts.remarketingId
+    fbq 'init', @remarketingId
 
   page: (category, name, properties, opts, callback) ->
     fbq 'track', 'PageView'

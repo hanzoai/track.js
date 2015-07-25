@@ -35,5 +35,9 @@
   "bugs": {
     "url": "https://github.com/crowdstart/analytics/issues"
   },
-  "homepage": "https://github.com/crowdstart/analytics#readme"
+  "homepage": "https://github.com/crowdstart/analytics#readme",
+  "dependencies": {
+    "load-iframe": "^1.0.0",
+    "load-script": "^1.0.0"
+  }
 }

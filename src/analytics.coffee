@@ -3,12 +3,12 @@ module.exports = class Analytics
     @integrations = []
 
     for method in [
-      'viewedProductCategory'
-      'viewedProduct'
       'addedProduct'
-      'removedProduct'
       'completedOrder'
       'experimentViewed'
+      'removedProduct'
+      'viewedProduct'
+      'viewedProductCategory'
     ]
       @[method] = =>
         @call method, arguments
@@ -52,16 +52,16 @@ module.exports = class Analytics
     console?.log.apply @, arguments if @_debug
 
   # Un-implemented
-  alias: ->
-  group: ->
-  load: ->
-  off: ->
-  on: ->
-  once: ->
-  ready: ->
-  reset: ->
-  trackClick: ->
-  trackForm: ->
-  trackLink: ->
+  alias:       ->
+  group:       ->
+  load:        ->
+  off:         ->
+  on:          ->
+  once:        ->
+  ready:       ->
+  reset:       ->
+  trackClick:  ->
+  trackForm:   ->
+  trackLink:   ->
   trackSubmit: ->
-  user: ->
+  user:        ->
