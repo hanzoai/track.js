@@ -1,29 +1,35 @@
 Integration = require '../integration'
 
 module.exports = class Google extends Integration
+  type: 'script'
+  src: '//www.google-analytics.com/analytics.js'
+
   constructor: (@opts) ->
+    @init()
 
   init: ->
-    do (i = window, s = document, o = 'script', g = '//www.google-analytics.com/analytics.js', r = 'ga', a, m) ->
-      window.GoogleAnalyticsObject] = r
-      i[r] = i[r] or ->
-        (i[r].q = i[r].q or []).push arguments
-        return
+    return if window.ga?
 
-      i[r].l = 1 * new Date()
+    ga = ->
+      ga.q ?= []
+      ga.q.push arguments
+      return
 
-      @load src: '//www.google-analytics.com/analytics.js', type: 'script'
+    ga.l = 1 * new Date()
+    window.GoogleAnalyticsObject = 'ga'
+    window.ga = ga
 
-    ga 'create', @trackingId, 'auto'
+    ga 'create', @opts.trackingId, 'auto'
 
   page: (category, name, properties, opts, cb) ->
     ga 'send', 'pageview',
       page:  opts.page
       title: opts.title
+    cb null
 
   # Ecommerce methods
-  viewedProductCategory: (event, properties, options, cb) ->
-  viewedProduct:         (event, properties, options, cb) ->
   addedProduct:          (event, properties, options, cb) ->
-  removedProduct:        (event, properties, options, cb) ->
   completedOrder:        (event, properties, options, cb) ->
+  removedProduct:        (event, properties, options, cb) ->
+  viewedProduct:         (event, properties, options, cb) ->
+  viewedProductCategory: (event, properties, options, cb) ->

@@ -1,6 +1,6 @@
 {onload} = require '../utils'
 
-module.exports = (opts, cb=->) ->
+module.exports = (opts, cb = ->) ->
   script = document.createElement 'script'
   onload script, cb
 

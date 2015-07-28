@@ -6,15 +6,19 @@ option '-v', '--version [<newversion> | major | minor | patch | build]', 'new ve
 
 task 'clean', 'clean project', (options) ->
   exec 'rm -rf lib'
-  exec 'rm -rf .test'
 
 task 'build', 'build project', (options) ->
+  coffee = require 'coffee-script'
+  fs     = require 'fs'
+
   exec 'node_modules/.bin/coffee -bcm -o lib/ src/'
-  exec 'node_modules/.bin/coffee -bcm -o .test/ test/'
+  src = fs.readFileSync 'src/snippet.coffee', 'utf-8'
+  src = coffee.compile src, bare: true
+  src = src.replace /%s/, 'analytics.js'
+  fs.writeFileSync 'test/snippet.js', src, 'utf-8'
 
 task 'watch', 'watch for changes and recompile project', ->
   exec 'node_modules/.bin/coffee -bcmw -o lib/ src/'
-  exec 'node_modules/.bin/coffee -bcmw -o .test test/'
 
 task 'publish', 'publish project', (options) ->
   newVersion = options.version ? 'patch'
