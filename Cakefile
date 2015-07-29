@@ -41,7 +41,7 @@ task 'publish', 'publish project', (options) ->
 task 'static-server', 'Run static server for tests', ->
   connect = require 'connect'
   server = connect()
-  server.use (require 'serve-static') './test'
+  server.use (require 'serve-static') './test/fixtures'
   server.listen process.env.PORT ? 3333
 
 task 'selenium-install', 'Install selenium standalone', ->
