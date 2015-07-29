@@ -12,10 +12,19 @@ task 'build', 'build project', (options) ->
   fs     = require 'fs'
 
   exec 'node_modules/.bin/coffee -bcm -o lib/ src/'
+
+  # build snippet for testing
   src = fs.readFileSync 'src/snippet.coffee', 'utf-8'
   src = coffee.compile src, bare: true
-  src = src.replace /%s/, 'analytics.js'
-  fs.writeFileSync 'test/snippet.js', src, 'utf-8'
+  src = src.replace /%s/, 'bundle.js'
+  fs.writeFileSync 'test/fixtures/snippet.js', src, 'utf-8'
+
+  # build bundled analytics (that snippet will load) for testing
+  src = fs.readFileSync 'src/bundle.coffee', 'utf-8'
+  src = coffee.compile src, bare: true
+  src = src.replace /integrations\({}\)/, 'integrations({foo:1})'
+  src = src.replace /initialize\({}\)/, 'initialize({bar:1})'
+  fs.writeFileSync 'test/fixtures/bundle.js', src, 'utf-8'
 
 task 'watch', 'watch for changes and recompile project', ->
   exec 'node_modules/.bin/coffee -bcmw -o lib/ src/'
