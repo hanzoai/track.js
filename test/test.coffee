@@ -1,7 +1,7 @@
 assert = require 'assert'
 should = require('chai').should()
 
-{getBrowser} = require './util'
+{getBrowser} = require './_util'
 
 describe "Analytics (#{process.env.BROWSER})", ->
   browser = getBrowser()
