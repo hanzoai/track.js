@@ -6,8 +6,8 @@ module.exports = class Integration
   load: (cb) ->
     switch @type
       when 'script'
-        loadScript @opts, cb
+        loadScript @, cb
       when 'img'
-        loadImg @opts, cb
+        loadImg @, cb
       when 'iframe'
-        loadIframe @opts, cb
+        loadIframe @, cb

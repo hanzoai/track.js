@@ -19,10 +19,14 @@ task 'build', 'build project', (options) ->
   snippetJs = snippetJs.replace /%s/, 'bundle.js'
   fs.writeFileSync 'test/fixtures/snippet.js', snippetJs, 'utf-8'
 
+  config =
+    'google-analytics':
+      trackingId: 'UA-65099214-1'
+
   # build bundled analytics (that snippet will load) for testing
   bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'
   bundleJs = coffee.compile bundleJs, bare: true
-  bundleJs = bundleJs.replace /initialize\({}\)/, 'initialize({bar:1})'
+  bundleJs = bundleJs.replace /initialize\({}\)/, "initialize(#{JSON.stringify config})"
 
   require('requisite').bundle entry: 'src/index.coffee', (err, bundle) ->
     analyticsJs = bundle.toString()

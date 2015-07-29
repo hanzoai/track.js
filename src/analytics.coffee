@@ -19,16 +19,13 @@ module.exports = class Analytics
       if integration[method]?
         integration[method].apply @, args
 
-  addIntegration: (name, opts = {}) ->
-    switch name
-      when 'Google Analytics'
-        @integrations.push new Google opts
-      when 'Facebook Conversion Tracking'
-        @integrations.push new Facebook opts
-
   initialize: (integrations = {}) ->
-    for k,v of integrations
-      @addIntegration k, v
+    for name, opts of integrations
+      constructor = require './integrations/' + name
+      integration = new constructor opts
+      integration.init()
+      integration.load()
+      @integrations.push integration
 
   identify: (userId, traits, options, callback) ->
     @call 'identify', userId, traits, options, callback

@@ -4,17 +4,15 @@ module.exports = (opts, cb = ->) ->
   script = document.createElement 'script'
   onload script, cb
 
-  script.type = opts.type or 'text/javascript'
-  script.charset = opts.charset or 'utf8'
-  script.async = (if 'async' of opts then !!opts.async else true)
+  script.async = opts.async ? 1
   script.src = opts.src
 
-  for k,v of attrs
+  for k,v of opts.attrs
     script.setAttribute k, v
 
   script.text = '' + opts.text if opts.text
 
   head = document.head or document.getElementsByTagName('head')[0]
-  head.appendChild script
+  head.parentNode.insertBefore script, head
 
   script

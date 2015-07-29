@@ -12,3 +12,6 @@ do ->
 
   # Replace stub analytics
   window.analytics = analytics
+
+  # track this page
+  analytics.page()
