@@ -71,7 +71,7 @@ task 'test', 'Run tests', (options) ->
 task 'test-ci', 'Run tests on CI server', ->
   invoke 'static-server'
 
-  browsers = require './test/ci-config'
+  browsers = require './test/_browsers'
 
   tests = for {browserName, platform, version, deviceName, deviceOrientation} in browsers
     "NODE_ENV=test
