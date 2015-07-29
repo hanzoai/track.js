@@ -1,6 +1,5 @@
 do ->
   analytics = new (require './analytics')
-  analytics.integrations {}
   analytics.initialize {}
 
   # Loop through the interim analytics queue and reapply the calls to their

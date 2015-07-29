@@ -14,17 +14,20 @@ task 'build', 'build project', (options) ->
   exec 'node_modules/.bin/coffee -bcm -o lib/ src/'
 
   # build snippet for testing
-  src = fs.readFileSync 'src/snippet.coffee', 'utf-8'
-  src = coffee.compile src, bare: true
-  src = src.replace /%s/, 'bundle.js'
-  fs.writeFileSync 'test/fixtures/snippet.js', src, 'utf-8'
+  snippetJs = fs.readFileSync 'src/snippet.coffee', 'utf-8'
+  snippetJs = coffee.compile snippetJs, bare: true
+  snippetJs = snippetJs.replace /%s/, 'bundle.js'
+  fs.writeFileSync 'test/fixtures/snippet.js', snippetJs, 'utf-8'
 
   # build bundled analytics (that snippet will load) for testing
-  src = fs.readFileSync 'src/bundle.coffee', 'utf-8'
-  src = coffee.compile src, bare: true
-  src = src.replace /integrations\({}\)/, 'integrations({foo:1})'
-  src = src.replace /initialize\({}\)/, 'initialize({bar:1})'
-  fs.writeFileSync 'test/fixtures/bundle.js', src, 'utf-8'
+  bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'
+  bundleJs = coffee.compile bundleJs, bare: true
+  bundleJs = bundleJs.replace /initialize\({}\)/, 'initialize({bar:1})'
+
+  require('requisite').bundle entry: 'src/index.coffee', (err, bundle) ->
+    analyticsJs = bundle.toString()
+    src = analyticsJs.replace /require\('\.\/index'\)/, bundleJs
+    fs.writeFileSync 'test/fixtures/bundle.js', src, 'utf-8'
 
 task 'watch', 'watch for changes and recompile project', ->
   exec 'node_modules/.bin/coffee -bcmw -o lib/ src/'
@@ -48,6 +51,8 @@ task 'selenium-install', 'Install selenium standalone', ->
   exec 'node_modules/.bin/selenium-standalone install'
 
 task 'test', 'Run tests', (options) ->
+  invoke 'build'
+
   browserName = options.browser ? 'phantomjs'
 
   invoke 'static-server'
