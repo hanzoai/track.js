@@ -54,24 +54,23 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   track: (event, props, opts, cb = ->) ->
-      data =
-        eventAction: event
+    data =
+      eventAction: event
 
-      if props?
-        data.eventCategory   = props.category
-        data.eventLabel      = props.label
-        data.eventValue      = props.value
-        data.nonInteraction  = props.nonInteraction
+    if props?
+      data.eventCategory   = props.category
+      data.eventLabel      = props.label
+      data.eventValue      = props.value
+      data.nonInteraction  = props.nonInteraction
 
-        if props.campaign?
-          data.campaignName    = props.campaign.name
-          data.campaignSource  = props.campaign.source
-          data.campaignMedium  = props.campaign.medium
-          data.campaignContent = props.campaign.content
-          data.campaignKeyword = props.campaign.term
+      if props.campaign?
+        data.campaignName    = props.campaign.name
+        data.campaignSource  = props.campaign.source
+        data.campaignMedium  = props.campaign.medium
+        data.campaignContent = props.campaign.content
+        data.campaignKeyword = props.campaign.term
 
     ga 'send', 'event', data
-
     cb null
 
   # Ecommerce methods
