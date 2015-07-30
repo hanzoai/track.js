@@ -1,5 +1,16 @@
 Integration = require '../integration'
 
+trackProduct = (props) ->
+   ga 'ec:addProduct',
+      id:       props.id ? props.sku
+      name:     props.name
+      category: props.category
+      quantity: props.quantity
+      price:    props.price
+      brand:    props.brand
+      variant:  props.variant
+      currency: props.currency
+
 module.exports = class GoogleAnalytics extends Integration
   type: 'script'
   src: '//www.google-analytics.com/analytics.js'
@@ -10,24 +21,6 @@ module.exports = class GoogleAnalytics extends Integration
 
   init: ->
     return if window.ga?
-
-    # ((i, s, o, g, r, a, m) ->
-    #   i["GoogleAnalyticsObject"] = r
-
-    #   i[r] = i[r] or ->
-    #     (i[r].q = i[r].q or []).push arguments
-    #     return
-
-    #   i[r].l = 1 * new Date()
-
-    #   a = s.createElement(o)
-    #   m = s.getElementsByTagName(o)[0]
-
-    #   a.async = 1
-    #   a.src = g
-    #   m.parentNode.insertBefore a, m
-    #   return
-    # ) window, document, "script", "//www.google-analytics.com/analytics.js", "ga"
 
     window.GoogleAnalyticsObject = 'ga'
 
@@ -41,15 +34,85 @@ module.exports = class GoogleAnalytics extends Integration
 
     ga 'create', @trackingId, 'auto'
 
+  identify: (userId, traits, options, callback) ->
+    # var opts = this.options;
+
+    # if (opts.sendUserId && identify.userId()) {
+    #   window.ga('set', 'userId', identify.userId());
+    # }
+
+    # // Set dimensions
+    # var custom = metrics(user.traits(), opts);
+    # if (len(custom)) window.ga('set', custom);
+
   page: (category, name, properties, opts, cb = ->) ->
     ga 'send', 'pageview',
-      page:  opts?.page
-      title: opts?.title
+      page:     opts.page
+      title:    opts.title
+      location: opts.location
+
+    cb null
+
+  track: (event, props, opts, cb = ->) ->
+      data =
+        eventAction: event
+
+      if props?
+        data.eventCategory   = props.category
+        data.eventLabel      = props.label
+        data.eventValue      = props.value
+        data.nonInteraction  = props.nonInteraction
+
+        if props.campaign?
+          data.campaignName    = props.campaign.name
+          data.campaignSource  = props.campaign.source
+          data.campaignMedium  = props.campaign.medium
+          data.campaignContent = props.campaign.content
+          data.campaignKeyword = props.campaign.term
+
+    ga 'send', 'event', data
+
     cb null
 
   # Ecommerce methods
-  addedProduct:          (event, properties, options, cb) ->
-  completedOrder:        (event, properties, options, cb) ->
-  removedProduct:        (event, properties, options, cb) ->
-  viewedProduct:         (event, properties, options, cb) ->
-  viewedProductCategory: (event, properties, options, cb) ->
+  addedProduct: (event, properties, options, cb) ->
+    # this.loadEnhancedEcommerce(track);
+    # enhancedEcommerceProductAction(track, 'add');
+    # this.pushEnhancedEcommerce(track);
+
+  completedOrder: (event, properties, options, cb) ->
+    # var total = track.total() || track.revenue() || 0;
+    # var orderId = track.orderId();
+    # var products = track.products();
+    # var props = track.properties();
+
+    # // orderId is required.
+    # if (!orderId) return;
+
+    # this.loadEnhancedEcommerce(track);
+
+    # each(products, function(product) {
+    #   var productTrack = createProductTrack(track, product);
+    #   enhancedEcommerceTrackProduct(productTrack);
+    # });
+
+    # window.ga('ec:setAction', 'purchase', {
+    #   id: orderId,
+    #   affiliation: props.affiliation,
+    #   revenue: total,
+    #   tax: track.tax(),
+    #   shipping: track.shipping(),
+    #   coupon: track.coupon()
+    # });
+
+    # this.pushEnhancedEcommerce(track);
+
+  removedProduct: (event, properties, options, cb) ->
+    # this.loadEnhancedEcommerce(track);
+    # enhancedEcommerceProductAction(track, 'remove');
+    # this.pushEnhancedEcommerce(track);
+
+  viewedProduct: (event, properties, options, cb) ->
+    # this.loadEnhancedEcommerce(track);
+    # enhancedEcommerceProductAction(track, 'detail');
+    # this.pushEnhancedEcommerce(track);

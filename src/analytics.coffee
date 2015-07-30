@@ -30,17 +30,17 @@ module.exports = class Analytics
   identify: (userId, traits, options, callback) ->
     @call 'identify', userId, traits, options, callback
 
-  track: (event, properties, options, callback) ->
+  track: (event, properties, opts, cb) ->
     method = event.replace /\s+/g, ''
     method = method[0].toLowerCase() + method.substring 1
 
     if @method?
-      @call method, properties, options, callback
+      @call method, properties, opts, cb
     else
-      @call 'track', properties, options, callback
+      @call 'track', properties, opts, cb
 
-  page: (category, name, properties, options, callback) ->
-    @call 'page', category, name, properties, options, callback
+  page: (category, name, properties, opts, cb) ->
+    @call 'page', category, name, properties, opts, cb
 
   debug: (bool = true) ->
     @_debug = bool
