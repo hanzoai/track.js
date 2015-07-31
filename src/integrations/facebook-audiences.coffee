@@ -24,7 +24,7 @@ module.exports = class FacebookAudiences extends Integration
     fbq.version = '2.0'
     fbq.queue = []
 
-    fbq 'init', @pixelId
+    fbq 'init', @id
     fbq 'track', 'PageView'
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->

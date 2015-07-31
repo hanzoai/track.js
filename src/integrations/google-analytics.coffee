@@ -21,7 +21,7 @@ module.exports = class GoogleAnalytics extends Integration
     ga.l = 1 * new Date()
     window.ga = ga
 
-    ga 'create', @trackingId, 'auto'
+    ga 'create', @id, 'auto'
 
   addProduct: (props) ->
     @log 'GoogleAnalytics.addProduct', arguments

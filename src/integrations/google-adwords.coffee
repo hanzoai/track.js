@@ -1,35 +1,35 @@
 Integration = require '../integration'
 
-module.exports = class Google extends Integration
+module.exports = class GoogleAdWords extends Integration
   type: 'script'
-  src: '//www.google-analytics.com/analytics.js'
+  src: '//www.googleadservices.com/pagead/conversion_async.js'
 
-  constructor: (@opts) ->
-    @init()
+  constructor: (@pixels = {}) ->
 
-  init: ->
-    return if window.ga?
+  page: (category, name, props, opts, cb = ->) ->
+    name = category if arguments.length == 1
 
-    ga = ->
-      ga.q ?= []
-      ga.q.push arguments
-      return
+    return unless (pixel = @pixels[name])?
 
-    ga.l = 1 * new Date()
-    window.GoogleAnalyticsObject = 'ga'
-    window.ga = ga
+    @log 'GoogleAdWords.page', arguments
 
-    ga 'create', @opts.trackingId, 'auto'
-
-  page: (category, name, properties, opts, cb) ->
-    ga 'send', 'pageview',
-      page:  opts.page
-      title: opts.title
+    google_trackConversion
+      google_conversion_id:    pixel.id
+      google_custom_params:    props
+      google_remarketing_only: pixel.remarketing ? false
     cb null
 
-  # Ecommerce methods
-  addedProduct:          (event, properties, options, cb) ->
-  completedOrder:        (event, properties, options, cb) ->
-  removedProduct:        (event, properties, options, cb) ->
-  viewedProduct:         (event, properties, options, cb) ->
-  viewedProductCategory: (event, properties, options, cb) ->
+  track: (event, props, opts, cb = ->) ->
+    return unless (pixel = @pixels[event])?
+
+    @log 'GoogleAdWords.track', arguments
+
+    google_trackConversion
+      google_conversion_id:       pixel.id
+      google_custom_params:       props
+      google_conversion_language: 'en'
+      google_conversion_format:   '3'
+      google_conversion_color:    'ffffff'
+      google_conversion_label:    event
+      google_conversion_value:    props.total
+      google_remarketing_only:    false

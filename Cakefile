@@ -21,14 +21,18 @@ task 'build', 'build project', (options) ->
 
   config =
     'google-analytics':
-      trackingId: 'UA-65099214-1'
+      id: 'UA-65099214-1'
+
+    'google-adwords':
+      'Sign-up':
+        id: '945491661'
 
     'facebook-conversions':
       'Sign-up':
         id: '6025763568614'
 
     'facebook-audiences':
-      pixelId: '920910517982389'
+      id: '920910517982389'
 
   # build bundled analytics (that snippet will load) for testing
   bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'
