@@ -1,6 +1,6 @@
 {onload} = require '../utils'
 
-module.exports = (opts, cb=->) ->
+module.exports = (opts, cb) ->
   img = new Image()
   onload img, cb
 

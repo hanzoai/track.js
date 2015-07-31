@@ -1,6 +1,6 @@
 {onload} = require '../utils'
 
-module.exports = (opts, cb=->) ->
+module.exports = (opts, cb) ->
   iframe = document.createElement 'iframe'
   onload iframe, cb
 

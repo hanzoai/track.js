@@ -22,6 +22,10 @@
         analytics.identify('123456')
 
         // Test track
+        analytics.track('Sign-up', {
+          category: 'Lead',
+        })
+
         analytics.track('Logged In', {
           category: 'Account',
           label: 'Premium',

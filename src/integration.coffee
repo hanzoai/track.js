@@ -3,7 +3,7 @@ loadImg    = require './loaders/img'
 loadIframe = require './loaders/iframe'
 
 module.exports = class Integration
-  load: (cb) ->
+  load: (cb = ->) ->
     switch @type
       when 'script'
         loadScript @, cb
