@@ -13,6 +13,10 @@ module.exports = class Analytics
       @[method] = =>
         @call method, arguments
 
+  ready: (fn = ->) ->
+    fn()
+    @log 'ready'
+
   # Call method for each integration
   call: (method, args...) ->
     for integration in @integrations
@@ -25,6 +29,9 @@ module.exports = class Analytics
       integration = new constructor opts
       integration.init()
       integration.load()
+      integration.log = =>
+        @log.apply @, arguments
+
       @integrations.push integration
 
   identify: (userId, traits, opts, cb) ->
@@ -46,7 +53,7 @@ module.exports = class Analytics
     @_debug = bool
 
   log: ->
-    console?.log.apply @, arguments if @_debug
+    console?.log.apply console, arguments if @_debug
 
   # Un-implemented
   alias:       ->
@@ -55,7 +62,6 @@ module.exports = class Analytics
   off:         ->
   on:          ->
   once:        ->
-  ready:       ->
   reset:       ->
   trackClick:  ->
   trackForm:   ->

@@ -1,17 +1,19 @@
 do ->
-  analytics = new (require './analytics')
+  # Save reference to stub analytics
+  stub = window.analytics ? []
+
+  # Create new analytics instance to replace stub
+  window.analytics = analyitcs = new (require './analytics')
+
+  # Initialize analytics instance
   analytics.initialize {}
 
-  # Loop through the interim analytics queue and reapply the calls to their
-  # proper analytics.js method.
-  while window?.analytics?.length > 0
-    item = window.analytics.shift()
+  # Loop through stub calls and replay them
+  while stub.length > 0
+    item = stub.shift()
     method = item.shift()
     if analytics[method]?
       analytics[method].apply analytics, item
-
-  # Replace stub analytics
-  window.analytics = analytics
 
   # track this page
   analytics.page()

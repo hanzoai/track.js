@@ -9,60 +9,130 @@
 
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
-        <script src="snippet.js"></script>
     </head>
     <body>
 
-      <!-- Button triggers checkout -->
-      <div style="margin-top: 25%; text-align:center;">
-        <a class="btn">Buy Now</a>
-      </div>
-
-      <!-- checkout widget -->
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-      <script type="text/javascript" src="https://cdn.rawgit.com/crowdstart/checkout/v1.1.23/checkout.min.js"></script>
-
+      <script src="snippet.js"></script>
       <script>
-        (function() {
-          // Create a new client for Crowdstart API.
-          var api = new Crowdstart.API('eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJiaXQiOjI0LCJqdGkiOiJVMDc0RlU3MHVhWSIsInN1YiI6IkVxVEdveHA1dTMifQ.g_MqPv2s0DnyFdhkUMzYn9mtKaXNwmlEM14WcFq_s5Yd2eqH16TB9thxOdDE8ylcoBMgyI3eimSHJxGq7oj-EA')
+        // Test identify
+        analytics.ready(function() {
+          analytics.debug()
+        })
 
-          // Create default order, should match whatever the user is trying to pay for
-          var order = new Crowdstart.Order('usd',[
-            new Crowdstart.ItemRef('84cRXBYs9jX7w', -1),
-            new Crowdstart.ItemRef('doge-shirt', 100)
-          ]);
+        analytics.identify('123456')
 
-          // Create default user (pre-populated in form fields)
-          var user = new Crowdstart.User('joe@fan.com', 'Joe', 'Fan')
+        // Test track
+        analytics.track('Viewed History')
+        analytics.track('Logged In', {
+          category: 'Account',
+          label: 'Premium',
+          value: 50
+        })
 
-          // Social sharing settings
-          var config = {
-            facebook: 'suchtees',
-            googlePlus: 'suchtees',
-            twitter: 'suchtees',
-            internationalShipping: 2000,
-            showPromoCode: true,
-            referralProgram: {
-              name: "$15 off each referral",
-              triggers: [0],
-              actions: [{
-                type: "Credit",
-                currency: "usd",
-                amount: 1500,
-              }],
+        analytics.track('Viewed Product', {
+          id: '507f1f77bcf86cd799439011',
+          sku: 'G-32',
+          name: 'Monopoly: 3rd Edition',
+          price: 18.99,
+          category: 'Games'
+        });
+
+        analytics.track('Added Product', {
+          id: '507f1f77bcf86cd799439011',
+          sku: '45790-32',
+          name: 'Monopoly: 3rd Edition',
+          price: 18.99,
+          quantity: 3,
+          category: 'Games'
+        });
+
+        analytics.track('Removed Product', {
+          id: '507f1f77bcf86cd799439011',
+          sku: '45790-32',
+          name: 'Monopoly: 3rd Edition',
+          price: 18.99,
+          quantity: 2,
+          category: 'Games'
+        });
+
+        analytics.track('Completed Order', {
+          orderId: '50314b8e9bcf000000000000',
+          total: 30,
+          revenue: 25,
+          shipping: 3,
+          tax: 2,
+          discount: 2.5,
+          coupon: 'hasbros',
+          currency: 'USD',
+          repeat: true,
+          products: [
+            {
+              id: '507f1f77bcf86cd799439011',
+              sku: '45790-32',
+              name: 'Monopoly: 3rd Edition',
+              price: 19,
+              quantity: 1,
+              category: 'Games'
+            },
+            {
+              id: '505bd76785ebb509fc183733',
+              sku: '46493-32',
+              name: 'Uno Card Game',
+              price: 3,
+              quantity: 2,
+              category: 'Games'
             }
-          }
+          ]
+        });
 
-          // Customize theme
-          Crowdstart.setTheme({
-            borderRadius: 5,
-          })
+        // Ecommerce events
+        analytics.track('Viewed Product Category', {
+          category: 'Games'
+        });
 
-          Crowdstart.Button('.btn')
-          // Instantiate widget, can be called multiple times, overriding order in widget.
-          Crowdstart.Checkout(api, order, user, config);
-        })()
+        // Test Checkout labeling / Enhanced Ecommerce
+        analytics.track('Viewed Checkout Step', {
+          step: 1
+        });
+        analytics.track('Completed Checkout Step', {
+          step: 1
+        });
+
+        analytics.track('Viewed Checkout Step', {
+          step: 2
+        });
+        analytics.track('Completed Checkout Step', {
+          step: 2
+        });
+
+        analytics.track('Viewed Checkout Step', {
+          step: 3
+        });
+        analytics.track('Completed Checkout Step', {
+          step: 3
+        });
+
+        analytics.track('Viewed Checkout Step', {
+          step: 4
+        });
+        analytics.track('Completed Checkout Step', {
+          step: 4
+        });
+
+        // Promotions
+        analytics.track('Viewed Promotion', {
+          id: 'promo-1',
+          name: 'Some Promotion',
+          creative: 'creative1.jpg',
+          position: 'top'
+        });
+
+        analytics.track('Clicked Promotion', {
+          id: 'promo-1',
+          name: 'Some promotion',
+          creative: 'creative1.jpg',
+          position: 'top'
+        });
       </script>
     </body>
 </html>
