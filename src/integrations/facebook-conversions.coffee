@@ -11,6 +11,7 @@ module.exports = class FacebookConversions extends Integration
     window._fbq = []
 
   load: ->
+    return if _fbq?.loaded
     super
     _fbq.loaded = true
 

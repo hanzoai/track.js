@@ -27,6 +27,8 @@ task 'build', 'build project', (options) ->
       'Sign-up':
         id: '6025763568614'
 
+    'facebook-audiences':
+      pixelId: '920910517982389'
 
   # build bundled analytics (that snippet will load) for testing
   bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'

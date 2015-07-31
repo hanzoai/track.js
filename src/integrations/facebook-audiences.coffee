@@ -2,20 +2,65 @@ Integration = require '../integration'
 
 module.exports = class FacebookAudiences extends Integration
   type: 'script'
-  src:  '//connect.facebook.net/en_US/fbds.js';
+  src:  '//connect.facebook.net/en_US/fbevents.js'
 
   constructor: (opts) ->
     for k,v of opts
       @[k] = v
 
   init: ->
-    # !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    # n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    # n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    # t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    # document,'script','//connect.facebook.net/en_US/fbevents.js');
+    return if window.fbq?
 
-    # fbq('init', '1428783730780722');
-    # fbq('track', 'PageView');
+    fbq = window.fbq = ->
+      if fbq.callMethod
+        fbq.callMethod.apply fbq, arguments
+      else
+        fbq.queue.push arguments
+      return
 
-  page: ->
+    window._fbq = fbq unless window._fbq
+    fbq.push = fbq
+    fbq.loaded = not 0
+    fbq.version = '2.0'
+    fbq.queue = []
+
+    fbq 'init', @pixelId
+    fbq 'track', 'PageView'
+
+  page: (category, name, props = {}, opts = {}, cb = ->) ->
+    @log 'FacebookAudiences.page', arguments
+    fbq 'track', 'ViewContent'
+    cb null
+
+  track: (event, props, opts, cb = ->) ->
+    switch event
+      when 'Initiate Checkout'
+        fbq 'track', 'InitiateCheckout'
+      when 'Add Payment Info'
+        fbq 'track', 'AddPaymentInfo'
+      when 'Lead'
+        fbq 'track', 'Lead'
+      when 'Complete Registration'
+        fbq 'track', 'CompleteRegistration'
+      when 'Search'
+        fbq 'track', 'Search'
+      when 'Add to Wishlist'
+        fbq 'track', 'AddToWishList'
+    cb null
+
+  viewedProduct: (event, props, opts, cb = ->) ->
+    @log 'FacebookAudiences.viewedProduct', arguments
+    fbq 'track', 'ViewContent'
+    cb null
+
+  addedProduct: (event, props, opts, cb = ->) ->
+    @log 'FacebookAudiences.addedProduct', arguments
+    fbq 'track', 'AddToCart'
+    cb null
+
+  completedOrder: (event, props, opts, cb = ->) ->
+    @log 'FacebookAudiences.completedOrder', arguments
+    fbq 'track', 'Purchase',
+      value:    props.total
+      currency: props.currency ? 'USD'
+    cb null
