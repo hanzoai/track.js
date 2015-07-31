@@ -62,7 +62,7 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   track: (event, props, opts, cb = ->) ->
-    @log 'track', event, props, opts
+    @log 'GoogleAnalytics.track', event, props, opts
 
     data =
       eventAction: event
@@ -83,10 +83,10 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'send', 'event', data
     cb null
 
-  loadEnhancedEcommerce: (event, props) ->
-    unless @enhancedEcommerceLoaded
+  loadEnhancedEcommerce: (event, props = {}) ->
+    unless @_enhancedEcommerceLoaded
       ga 'require', 'ec'
-      @enhancedEcommerceLoaded = true
+      @_enhancedEcommerceLoaded = true
 
     # Ensure we set currency for every hit
     ga 'set', '&cu', props.currency ? 'USD'

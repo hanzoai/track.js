@@ -4,9 +4,11 @@ module.exports = class Analytics
 
     for method in [
       'addedProduct'
+      'completedCheckoutStep'
       'completedOrder'
       'experimentViewed'
       'removedProduct'
+      'viewedCheckoutStep'
       'viewedProduct'
       'viewedProductCategory'
     ]
@@ -15,15 +17,10 @@ module.exports = class Analytics
 
   ready: (fn = ->) ->
     fn()
-    @log 'ready'
-
-  # Call method for each integration
-  call: (method, args...) ->
-    for integration in @integrations
-      if integration[method]?
-        integration[method].apply @, args
+    @log 'Analytics.ready'
 
   initialize: (integrations = {}) ->
+    @log 'Analytics.initialize', integrations
     for name, opts of integrations
       constructor = require './integrations/' + name
       integration = new constructor opts
@@ -34,20 +31,30 @@ module.exports = class Analytics
 
       @integrations.push integration
 
+  # Call method for each integration
+  call: (method, args...) ->
+    @log 'Analytics.call', method, args
+    for integration in @integrations
+      if integration[method]?
+        integration[method].apply integration, args
+
   identify: (userId, traits, opts, cb) ->
+    @log 'Analytics.identify', arguments
     @call 'identify', userId, traits, opts, cb
 
-  track: (event, properties, opts, cb) ->
+  track: (event, props, opts, cb) ->
+    @log 'Analytics.track', arguments
     method = event.replace /\s+/g, ''
     method = method[0].toLowerCase() + method.substring 1
 
-    if @method?
-      @call method, properties, opts, cb
+    if @[method]?
+      @call method, event, props, opts, cb
     else
-      @call 'track', properties, opts, cb
+      @call 'track', event, props, opts, cb
 
-  page: (category, name, properties, opts, cb) ->
-    @call 'page', category, name, properties, opts, cb
+  page: (category, name, props, opts, cb) ->
+    @log 'Analytics.page', arguments
+    @call 'page', category, name, props, opts, cb
 
   debug: (bool = true) ->
     @_debug = bool
