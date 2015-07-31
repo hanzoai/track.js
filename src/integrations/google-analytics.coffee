@@ -1,15 +1,22 @@
 Integration = require '../integration'
 
-trackProduct = (props) ->
-   ga 'ec:addProduct',
-      id:       props.id ? props.sku
-      name:     props.name
-      category: props.category
-      quantity: props.quantity
-      price:    props.price
-      brand:    props.brand
-      variant:  props.variant
-      currency: props.currency
+addProduct = (props) ->
+  ga 'ec:addProduct',
+    id:       props.id ? props.sku
+    brand:    props.brand
+    category: props.category
+    coupon:   props.coupon
+    currency: props.currency
+    name:     props.name
+    price:    props.price
+    quantity: props.quantity
+    variant:  props.variant
+
+setAction = (action, props) ->
+  ga 'ec:setAction', action, props
+
+sendEvent = (event, props) ->
+  ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event, nonInteraction: 1
 
 module.exports = class GoogleAnalytics extends Integration
   type: 'script'
@@ -34,23 +41,17 @@ module.exports = class GoogleAnalytics extends Integration
 
     ga 'create', @trackingId, 'auto'
 
-  identify: (userId, traits, options, callback) ->
-    # var opts = this.options;
+  identify: (userId, traits, opts, cb) ->
+    # Do not send PII as id or extra metadata as it's against the
+    # Google Analytics terms of service.
+    ga 'set', 'userId', userId
+    cb null
 
-    # if (opts.sendUserId && identify.userId()) {
-    #   window.ga('set', 'userId', identify.userId());
-    # }
-
-    # // Set dimensions
-    # var custom = metrics(user.traits(), opts);
-    # if (len(custom)) window.ga('set', custom);
-
-  page: (category, name, properties, opts, cb = ->) ->
+  page: (category, name, props, opts, cb = ->) ->
     ga 'send', 'pageview',
       page:     opts.page
       title:    opts.title
       location: opts.location
-
     cb null
 
   track: (event, props, opts, cb = ->) ->
@@ -63,55 +64,55 @@ module.exports = class GoogleAnalytics extends Integration
       data.eventValue      = props.value
       data.nonInteraction  = props.nonInteraction
 
-      if props.campaign?
-        data.campaignName    = props.campaign.name
-        data.campaignSource  = props.campaign.source
-        data.campaignMedium  = props.campaign.medium
-        data.campaignContent = props.campaign.content
-        data.campaignKeyword = props.campaign.term
+      if (campaign = props.campaign)?
+        data.campaignName    = campaign.name
+        data.campaignSource  = campaign.source
+        data.campaignMedium  = campaign.medium
+        data.campaignContent = campaign.content
+        data.campaignKeyword = campaign.term
 
     ga 'send', 'event', data
     cb null
 
-  # Ecommerce methods
-  addedProduct: (event, properties, options, cb) ->
-    # this.loadEnhancedEcommerce(track);
-    # enhancedEcommerceProductAction(track, 'add');
-    # this.pushEnhancedEcommerce(track);
+  loadEnhancedEcommerce: (event, props) ->
+    unless @enhancedEcommerceLoaded
+      ga 'require', 'ec'
+      @enhancedEcommerceLoaded = true
 
-  completedOrder: (event, properties, options, cb) ->
-    # var total = track.total() || track.revenue() || 0;
-    # var orderId = track.orderId();
-    # var products = track.products();
-    # var props = track.properties();
+    # Ensure we set currency for every hit
+    ga 'set', '&cu', props.currency ? 'USD'
 
-    # // orderId is required.
-    # if (!orderId) return;
+  viewedProduct: (event, props, opts, cb) ->
+    @loadEnhancedEcommerce event, props
+    addProduct props
+    setAction 'detail', props
+    sendEvent event, props
 
-    # this.loadEnhancedEcommerce(track);
+  addedProduct: (event, props, opts, cb) ->
+    @loadEnhancedEcommerce event, props
+    addProduct props
+    setAction 'add', props
+    sendEvent event, props
 
-    # each(products, function(product) {
-    #   var productTrack = createProductTrack(track, product);
-    #   enhancedEcommerceTrackProduct(productTrack);
-    # });
+  removedProduct: (event, props, opts, cb) ->
+    @loadEnhancedEcommerce event, props
+    addProduct props
+    setAction 'remove', props
+    sendEvent event, props
 
-    # window.ga('ec:setAction', 'purchase', {
-    #   id: orderId,
-    #   affiliation: props.affiliation,
-    #   revenue: total,
-    #   tax: track.tax(),
-    #   shipping: track.shipping(),
-    #   coupon: track.coupon()
-    # });
+  completedOrder: (event, props, opts, cb) ->
+    @loadEnhancedEcommerce event, props
+    return unless props.orderId? and props.products?
 
-    # this.pushEnhancedEcommerce(track);
+    for product in props.products
+      addProduct product
 
-  removedProduct: (event, properties, options, cb) ->
-    # this.loadEnhancedEcommerce(track);
-    # enhancedEcommerceProductAction(track, 'remove');
-    # this.pushEnhancedEcommerce(track);
+    setAction 'purchase',
+      id:          props.orderId
+      affiliation: props.affiliation
+      revenue:     props.total
+      tax:         props.tax
+      shipping:    props.shipping
+      coupon:      props.coupon
 
-  viewedProduct: (event, properties, options, cb) ->
-    # this.loadEnhancedEcommerce(track);
-    # enhancedEcommerceProductAction(track, 'detail');
-    # this.pushEnhancedEcommerce(track);
+    sendEvent event, props

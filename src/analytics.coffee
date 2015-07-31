@@ -27,8 +27,8 @@ module.exports = class Analytics
       integration.load()
       @integrations.push integration
 
-  identify: (userId, traits, options, callback) ->
-    @call 'identify', userId, traits, options, callback
+  identify: (userId, traits, opts, cb) ->
+    @call 'identify', userId, traits, opts, cb
 
   track: (event, properties, opts, cb) ->
     method = event.replace /\s+/g, ''
