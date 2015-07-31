@@ -22,7 +22,6 @@
         analytics.identify('123456')
 
         // Test track
-        analytics.track('Viewed History')
         analytics.track('Logged In', {
           category: 'Account',
           label: 'Premium',
@@ -125,13 +124,15 @@
           name: 'Some Promotion',
           creative: 'creative1.jpg',
           position: 'top'
+          category: 'Promotion'
         });
 
         analytics.track('Clicked Promotion', {
           id: 'promo-1',
           name: 'Some promotion',
           creative: 'creative1.jpg',
-          position: 'top'
+          position: 'top',
+          category: 'Promotion'
         });
       </script>
     </body>
