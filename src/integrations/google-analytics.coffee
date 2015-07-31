@@ -1,23 +1,5 @@
 Integration = require '../integration'
 
-addProduct = (props) ->
-  ga 'ec:addProduct',
-    id:       props.id ? props.sku
-    brand:    props.brand
-    category: props.category
-    coupon:   props.coupon
-    currency: props.currency
-    name:     props.name
-    price:    props.price
-    quantity: props.quantity
-    variant:  props.variant
-
-setAction = (action, props) ->
-  ga 'ec:setAction', action, props
-
-sendEvent = (event, props = {}) ->
-  ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event, nonInteraction: 1
-
 module.exports = class GoogleAnalytics extends Integration
   type: 'script'
   src: '//www.google-analytics.com/analytics.js'
@@ -41,13 +23,36 @@ module.exports = class GoogleAnalytics extends Integration
 
     ga 'create', @trackingId, 'auto'
 
+  addProduct: (props) ->
+    @log 'GoogleAnalytics.addProduct', arguments
+    ga 'ec:addProduct',
+      id:       props.id ? props.sku
+      brand:    props.brand
+      category: props.category
+      coupon:   props.coupon
+      currency: props.currency
+      name:     props.name
+      price:    props.price
+      quantity: props.quantity
+      variant:  props.variant
+
+  setAction: (action, props) ->
+    @log 'GoogleAnalytics.setAction', arguments
+    ga 'ec:setAction', action, props
+
+  sendEvent: (event, props = {}) ->
+    @log 'GoogleAnalytics.sendEvent', arguments
+    ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event, nonInteraction: 1
+
   identify: (userId, traits, opts, cb = ->) ->
+    @log 'GoogleAnalytics.identify', arguments
     # Do not send PII as id or extra metadata as it's against the
     # Google Analytics terms of service.
     ga 'set', 'userId', userId
     cb null
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
+    @log 'GoogleAnalytics.page', arguments
     name = category if arguments.length == 1
 
     ga 'set',
@@ -62,7 +67,7 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   track: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.track', event, props, opts
+    @log 'GoogleAnalytics.track', arguments
 
     data =
       eventAction: event
@@ -84,6 +89,8 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   loadEnhancedEcommerce: (event, props = {}) ->
+    @log 'GoogleAnalytics.loadEnhancedEcommerce', arguments
+
     unless @_enhancedEcommerceLoaded
       ga 'require', 'ec'
       @_enhancedEcommerceLoaded = true
@@ -92,34 +99,37 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'set', '&cu', props.currency ? 'USD'
 
   viewedProduct: (event, props, opts, cb = ->) ->
+    @log 'GoogleAnalytics.viewedProduct', arguments
     @loadEnhancedEcommerce event, props
-    addProduct props
-    setAction 'detail', props
-    sendEvent event, props
+    @addProduct props
+    @setAction 'detail', props
+    @sendEvent event, props
     cb null
 
   addedProduct: (event, props, opts, cb = ->) ->
+    @log 'GoogleAnalytics.addedProduct', arguments
     @loadEnhancedEcommerce event, props
-    addProduct props
-    setAction 'add', props
-    sendEvent event, props
+    @addProduct props
+    @setAction 'add', props
+    @sendEvent event, props
     cb null
 
   removedProduct: (event, props, opts, cb = ->) ->
+    @log 'GoogleAnalytics.removedProduct', arguments
     @loadEnhancedEcommerce event, props
-    addProduct props
-    setAction 'remove', props
-    sendEvent event, props
+    @addProduct props
+    @setAction 'remove', props
+    @sendEvent event, props
     cb null
 
   completedOrder: (event, props, opts, cb = ->) ->
+    @log 'GoogleAnalytics.completedOrder', arguments
     @loadEnhancedEcommerce event, props
     return unless props.orderId? and props.products?
 
-    for product in props.products
-      addProduct product
+    @addProduct product for product in props.products
 
-    setAction 'purchase',
+    @setAction 'purchase',
       id:          props.orderId
       affiliation: props.affiliation
       revenue:     props.total
@@ -127,5 +137,5 @@ module.exports = class GoogleAnalytics extends Integration
       shipping:    props.shipping
       coupon:      props.coupon
 
-    sendEvent event, props
+    @sendEvent event, props
     cb null
