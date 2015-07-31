@@ -5,9 +5,21 @@ module.exports = class GoogleAdWords extends Integration
   src: '//www.googleadservices.com/pagead/conversion_async.js'
 
   constructor: (@pixels = {}) ->
+    @queue = []
 
   init: ->
-    window.google_trackConversion = ->
+    return if window.google_trackConversion?
+
+    window.google_trackConversion = (event) =>
+      @queue.push event
+
+  load: (cb = ->) ->
+    super =>
+      # replay event to clear queue
+      if @queue.length
+        @log 'GoogleAdWords.load', 'replaying events:', @queue
+        google_trackConversion event for event in @queue
+      cb null
 
   page: (category, name, props, opts, cb = ->) ->
     name = category if arguments.length == 1
@@ -19,7 +31,7 @@ module.exports = class GoogleAdWords extends Integration
     google_trackConversion
       google_conversion_id:    pixel.id
       google_custom_params:    props
-      google_remarketing_only: pixel.remarketing ? false
+      google_remarketing_only: true
 
     cb null
 
