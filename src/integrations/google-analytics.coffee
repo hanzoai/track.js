@@ -42,7 +42,7 @@ module.exports = class GoogleAnalytics extends Integration
 
   sendEvent: (event, props = {}) ->
     @log 'GoogleAnalytics.sendEvent', arguments
-    ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event, nonInteraction: 1
+    ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event
 
   identify: (userId, traits, opts, cb = ->) ->
     @log 'GoogleAnalytics.identify', arguments
