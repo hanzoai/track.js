@@ -6,6 +6,9 @@ module.exports = class GoogleAdWords extends Integration
 
   constructor: (@pixels = {}) ->
 
+  init: ->
+    window.google_trackConversion = ->
+
   page: (category, name, props, opts, cb = ->) ->
     name = category if arguments.length == 1
 
@@ -17,6 +20,7 @@ module.exports = class GoogleAdWords extends Integration
       google_conversion_id:    pixel.id
       google_custom_params:    props
       google_remarketing_only: pixel.remarketing ? false
+
     cb null
 
   track: (event, props, opts, cb = ->) ->
@@ -33,3 +37,5 @@ module.exports = class GoogleAdWords extends Integration
       google_conversion_label:    event
       google_conversion_value:    props.total
       google_remarketing_only:    false
+
+    cb null
