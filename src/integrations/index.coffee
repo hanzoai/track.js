@@ -1,5 +1,5 @@
 module.exports =
-  FacebookAudiences:    require './facebook-audiences.coffee'
-  FacebookConversions:  require './facebook-conversions.coffee'
-  GoogleAdWords:        require './google-adwords.coffee'
-  GoogleAnalytics:      require './google-analytics.coffee'
+  FacebookAudiences:    require './facebook-audiences'
+  FacebookConversions:  require './facebook-conversions'
+  GoogleAdWords:        require './google-adwords'
+  GoogleAnalytics:      require './google-analytics'
