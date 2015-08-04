@@ -4,9 +4,7 @@ module.exports = class GoogleAnalytics extends Integration
   type: 'script'
   src: '//www.google-analytics.com/analytics.js'
 
-  constructor: (opts) ->
-    for k,v of opts
-      @[k] = v
+  constructor: (@opts) ->
 
   init: ->
     return if window.ga?
@@ -21,7 +19,7 @@ module.exports = class GoogleAnalytics extends Integration
     ga.l = 1 * new Date()
     window.ga = ga
 
-    ga 'create', @id, 'auto'
+    ga 'create', @opts.id, 'auto'
 
   addProduct: (props) ->
     @log 'GoogleAnalytics.addProduct', arguments

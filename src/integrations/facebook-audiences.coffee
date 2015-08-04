@@ -4,9 +4,7 @@ module.exports = class FacebookAudiences extends Integration
   type: 'script'
   src:  '//connect.facebook.net/en_US/fbevents.js'
 
-  constructor: (opts) ->
-    for k,v of opts
-      @[k] = v
+  constructor: (@opts) ->
 
   init: ->
     return if window.fbq?
@@ -24,7 +22,7 @@ module.exports = class FacebookAudiences extends Integration
     fbq.version = '2.0'
     fbq.queue = []
 
-    fbq 'init', @id
+    fbq 'init', @opts.id
     fbq 'track', 'PageView'
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
