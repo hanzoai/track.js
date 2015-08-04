@@ -4,6 +4,8 @@ stub = window.analytics ? []
 # Create new analytics instance to replace stub
 window.analytics = analytics = new (require './analytics')
 
+analytics.debug() if stub.debug
+
 # Initialize analytics instance
 analytics.initialize {}
 

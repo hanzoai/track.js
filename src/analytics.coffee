@@ -1,6 +1,11 @@
+Integration = require './integration'
+
 module.exports = class Analytics
   constructor: ->
     @integrations = []
+
+    Integration::log = =>
+      @log.apply @, arguments
 
     for method in [
       'addedProduct'
@@ -16,20 +21,18 @@ module.exports = class Analytics
         @call method, arguments
 
   ready: (fn = ->) ->
-    fn()
     @log 'Analytics.ready'
+    fn()
 
   initialize: (opts = {}) ->
     @log 'Analytics.initialize', opts
     opts.integrations ?= []
+
     for integration in opts.integrations
       constructor = require './integrations/' + integration.type
       instance = new constructor integration
       instance.init()
       instance.load()
-      instance.log = =>
-        @log.apply @, arguments
-
       @integrations.push instance
 
   # Call method for each integration

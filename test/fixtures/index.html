@@ -12,12 +12,11 @@
     </head>
     <body>
 
+      <!-- create stub analytics and load real thing asynchronously -->
       <script src="snippet.js"></script>
       <script>
         // Test identify
-        analytics.ready(function() {
-          analytics.debug()
-        })
+        analytics.debug = true
 
         analytics.identify('123456')
 
