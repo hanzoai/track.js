@@ -19,21 +19,24 @@ task 'build', 'build project', (options) ->
   snippetJs = snippetJs.replace /%s/, 'bundle.js'
   fs.writeFileSync 'test/fixtures/snippet.js', snippetJs, 'utf-8'
 
-  config = [
-    type: 'google-analytics'
-    id: 'UA-65099214-1'
-  ,
-    type: 'facebook-audiences'
-    id: '920910517982389'
-  ,
-    type: 'google-adwords'
-    event: 'Sign-up'
-    id: '945491661'
-  ,
-    type: 'facebook-conversions'
-    event: 'Sign-up'
-    id: '6025763568614'
-  ]
+  config = {
+    integrations:
+      [
+        type: 'google-analytics'
+        id: 'UA-65099214-1'
+      ,
+        type: 'facebook-audiences'
+        id: '920910517982389'
+      ,
+        type: 'google-adwords'
+        event: 'Sign-up'
+        id: '945491661'
+      ,
+        type: 'facebook-conversions'
+        event: 'Sign-up'
+        id: '6025763568614'
+      ]
+  }
 
   # build bundled analytics (that snippet will load) for testing
   bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'
