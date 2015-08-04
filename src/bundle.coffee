@@ -2,7 +2,7 @@
 stub = window.analytics ? []
 
 # Create new analytics instance to replace stub
-window.analytics = analyitcs = new (require './analytics')
+window.analytics = analytics = new (require './analytics')
 
 # Initialize analytics instance
 analytics.initialize {}

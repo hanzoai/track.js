@@ -22,7 +22,7 @@ module.exports = class Analytics
   initialize: (opts = {}) ->
     @log 'Analytics.initialize', opts
     opts.integrations ?= []
-    for integration in integrations
+    for integration in opts.integrations
       constructor = require './integrations/' + integration.type
       instance = new constructor integration
       instance.init()
