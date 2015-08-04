@@ -4,7 +4,9 @@ module.exports = class GoogleAdWords extends Integration
   type: 'script'
   src: '//www.googleadservices.com/pagead/conversion_async.js'
 
-  constructor: (@pixels = {}) ->
+  constructor: (opts) ->
+    for k,v of opts
+      @[k] = v
     @queue = []
 
   init: ->
@@ -24,24 +26,24 @@ module.exports = class GoogleAdWords extends Integration
   page: (category, name, props, opts, cb = ->) ->
     name = category if arguments.length == 1
 
-    return unless (pixel = @pixels[name])?
+    return unless name == @event
 
     @log 'GoogleAdWords.page', arguments
 
     google_trackConversion
-      google_conversion_id:    pixel.id
+      google_conversion_id:    @id
       google_custom_params:    props
       google_remarketing_only: true
 
     cb null
 
   track: (event, props, opts, cb = ->) ->
-    return unless (pixel = @pixels[event])?
+    return unless event == @event
 
     @log 'GoogleAdWords.track', arguments
 
     google_trackConversion
-      google_conversion_id:       pixel.id
+      google_conversion_id:       @id
       google_custom_params:       props
       google_conversion_language: 'en'
       google_conversion_format:   '3'

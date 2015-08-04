@@ -19,17 +19,18 @@ module.exports = class Analytics
     fn()
     @log 'Analytics.ready'
 
-  initialize: (integrations = {}) ->
-    @log 'Analytics.initialize', integrations
-    for name, opts of integrations
-      constructor = require './integrations/' + name
-      integration = new constructor opts
-      integration.init()
-      integration.load()
-      integration.log = =>
+  initialize: (opts = {}) ->
+    @log 'Analytics.initialize', opts
+    opts.integrations ?= []
+    for integration in integrations
+      constructor = require './integrations/' + integration.type
+      instance = new constructor integration
+      instance.init()
+      instance.load()
+      instance.log = =>
         @log.apply @, arguments
 
-      @integrations.push integration
+      @integrations.push instance
 
   # Call method for each integration
   call: (method, args...) ->
