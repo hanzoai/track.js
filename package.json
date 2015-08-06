@@ -1,6 +1,6 @@
 {
   "name": "crowdstart-analytics",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Analytics support for Crowdstart.",
   "main": "lib",
   "devDependencies": {
