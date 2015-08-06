@@ -1,5 +1,14 @@
 Integration = require '../integration'
 
+# GA only accepts ints as values
+parseValue = (value) ->
+  if typeof value == 'string'
+    if (value.indexOf '.') != -1
+      value = Math.round parseFloat value, 10
+    else
+      value = parseInt value, 10
+  value
+
 module.exports = class GoogleAnalytics extends Integration
   type: 'script'
   src: '//www.google-analytics.com/analytics.js'
@@ -40,7 +49,29 @@ module.exports = class GoogleAnalytics extends Integration
 
   sendEvent: (event, props = {}) ->
     @log 'GoogleAnalytics.sendEvent', arguments
-    ga 'send', 'event', (props.category ? 'EnhancedEcommerce'), event
+
+    data =
+      eventAction: event
+
+    if props?
+      data.eventCategory   = props.category
+      data.eventLabel      = props.label
+      data.eventValue      = parseValue props.value ? props.total ? props.revenue ? 0
+      data.nonInteraction  = props.nonInteraction
+
+      if (campaign = props.campaign)?
+        data.campaignName    = campaign.name
+        data.campaignSource  = campaign.source
+        data.campaignMedium  = campaign.medium
+        data.campaignContent = campaign.content
+        data.campaignKeyword = campaign.term
+
+    ga 'send', 'event', data
+
+  sendEEEvent: (event, props) ->
+    # props.nonInteraction = true
+    props.category ?= 'EnhancedEcommerce'
+    @sendEvent event, props
 
   identify: (userId, traits, opts, cb = ->) ->
     @log 'GoogleAnalytics.identify', arguments
@@ -66,24 +97,7 @@ module.exports = class GoogleAnalytics extends Integration
 
   track: (event, props, opts, cb = ->) ->
     @log 'GoogleAnalytics.track', arguments
-
-    data =
-      eventAction: event
-
-    if props?
-      data.eventCategory   = props.category
-      data.eventLabel      = props.label
-      data.eventValue      = props.value
-      data.nonInteraction  = props.nonInteraction
-
-      if (campaign = props.campaign)?
-        data.campaignName    = campaign.name
-        data.campaignSource  = campaign.source
-        data.campaignMedium  = campaign.medium
-        data.campaignContent = campaign.content
-        data.campaignKeyword = campaign.term
-
-    ga 'send', 'event', data
+    @sendEvent event, props
     cb null
 
   loadEnhancedEcommerce: (event, props = {}) ->
@@ -101,7 +115,7 @@ module.exports = class GoogleAnalytics extends Integration
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'detail', props
-    @sendEvent event, props
+    @sendEEEvent event, props
     cb null
 
   addedProduct: (event, props, opts, cb = ->) ->
@@ -109,7 +123,7 @@ module.exports = class GoogleAnalytics extends Integration
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'add', props
-    @sendEvent event, props
+    @sendEEEvent event, props
     cb null
 
   removedProduct: (event, props, opts, cb = ->) ->
@@ -117,7 +131,7 @@ module.exports = class GoogleAnalytics extends Integration
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'remove', props
-    @sendEvent event, props
+    @sendEEEvent event, props
     cb null
 
   completedOrder: (event, props, opts, cb = ->) ->
@@ -130,10 +144,10 @@ module.exports = class GoogleAnalytics extends Integration
     @setAction 'purchase',
       id:          props.orderId
       affiliation: props.affiliation
-      revenue:     props.total
+      revenue:     props.total ? props.revenue
       tax:         props.tax
       shipping:    props.shipping
       coupon:      props.coupon
 
-    @sendEvent event, props
+    @sendEEEvent event, props
     cb null
