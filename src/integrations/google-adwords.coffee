@@ -1,8 +1,9 @@
 Integration = require '../integration'
 
 module.exports = class GoogleAdWords extends Integration
-  type: 'script'
-  src: '//www.googleadservices.com/pagead/conversion_async.js'
+  src:
+    type: 'script'
+    url: '//www.googleadservices.com/pagead/conversion_async.js'
 
   constructor: (@opts) ->
     @queue = []

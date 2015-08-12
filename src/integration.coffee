@@ -7,11 +7,14 @@ module.exports = class Integration
     @log 'Integration.init'
 
   load: (cb = ->) ->
-    @log 'Integration.load', @type
-    switch @type
+    @log 'Integration.load', @src
+
+    return unless @src?.type? and @src?.url?
+
+    switch @src.type
       when 'script'
-        loadScript @, cb
+        loadScript @src.url, cb
       when 'img'
-        loadImg @, cb
+        loadImg @src.url, cb
       when 'iframe'
-        loadIframe @, cb
+        loadIframe @src.url, cb

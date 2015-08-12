@@ -7,19 +7,6 @@ module.exports = class Analytics
     Integration::log = =>
       @log.apply @, arguments
 
-    for method in [
-      'addedProduct'
-      'completedCheckoutStep'
-      'completedOrder'
-      'experimentViewed'
-      'removedProduct'
-      'viewedCheckoutStep'
-      'viewedProduct'
-      'viewedProductCategory'
-    ]
-      @[method] = =>
-        @call method, arguments
-
   ready: (fn = ->) ->
     @log 'Analytics.ready'
     fn()
@@ -36,11 +23,13 @@ module.exports = class Analytics
       @integrations.push instance
 
   # Call method for each integration
-  call: (method, args...) ->
-    @log 'Analytics.call', method, args
+  call: (method, event, props, opts, cb = ->) ->
+    @log 'Analytics.call', method, event, props, opts
     for integration in @integrations
       if integration[method]?
-        integration[method].apply integration, args
+        integration[method].apply integration, event, props, opts, cb
+      else
+        integration.track.apply integration, event, props, opts, cb
 
   identify: (userId, traits, opts, cb) ->
     @log 'Analytics.identify', arguments
@@ -50,11 +39,7 @@ module.exports = class Analytics
     @log 'Analytics.track', event, props, opts
     method = event.replace /\s+/g, ''
     method = method[0].toLowerCase() + method.substring 1
-
-    if @[method]?
-      @call method, event, props, opts, cb
-    else
-      @call 'track', event, props, opts, cb
+    @call method, event, props, opts, cb
 
   page: (category, name, props, opts, cb) ->
     @log 'Analytics.page', arguments

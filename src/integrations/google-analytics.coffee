@@ -10,8 +10,9 @@ parseValue = (value) ->
   value
 
 module.exports = class GoogleAnalytics extends Integration
-  type: 'script'
-  src: '//www.google-analytics.com/analytics.js'
+  src:
+    type: 'script'
+    url: '//www.google-analytics.com/analytics.js'
 
   constructor: (@opts) ->
 

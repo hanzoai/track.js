@@ -1,8 +1,9 @@
 Integration = require '../integration'
 
 module.exports = class FacebookAudiences extends Integration
-  type: 'script'
-  src:  '//connect.facebook.net/en_US/fbevents.js'
+  src:
+    type: 'script'
+    url: '//connect.facebook.net/en_US/fbevents.js'
 
   constructor: (@opts) ->
 

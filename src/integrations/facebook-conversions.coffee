@@ -1,8 +1,9 @@
 Integration = require '../integration'
 
 module.exports = class FacebookConversions extends Integration
-  type: 'script'
-  src:  '//connect.facebook.net/en_US/fbds.js';
+  src:
+    type: 'script'
+    url: '//connect.facebook.net/en_US/fbds.js';
 
   constructor: (@opts) ->
 
