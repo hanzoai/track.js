@@ -27,9 +27,9 @@ module.exports = class Analytics
     @log 'Analytics.call', method, event, props, opts
     for integration in @integrations
       if integration[method]?
-        integration[method].apply integration, event, props, opts, cb
+        integration[method].call integration, event, props, opts, cb
       else
-        integration.track.apply integration, event, props, opts, cb
+        integration.track.call integration, event, props, opts, cb
 
   identify: (userId, traits, opts, cb) ->
     @log 'Analytics.identify', arguments

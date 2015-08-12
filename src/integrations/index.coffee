@@ -1,4 +1,5 @@
 module.exports =
+  Generic:              require './generic'
   FacebookAudiences:    require './facebook-audiences'
   FacebookConversions:  require './facebook-conversions'
   GoogleAdWords:        require './google-adwords'

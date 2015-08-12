@@ -19,7 +19,8 @@ task 'build', 'build project', (options) ->
   snippetJs = snippetJs.replace /%s/, 'bundle.js'
   fs.writeFileSync 'test/fixtures/snippet.js', snippetJs, 'utf-8'
 
-  config = {
+  config = coffee.compile """
+  {
     integrations:
       [
         type: 'google-analytics'
@@ -35,13 +36,24 @@ task 'build', 'build project', (options) ->
         type: 'facebook-conversions'
         event: 'Sign-up'
         id: '6025763568614'
+      ,
+        type: 'generic'
+        name: 'Custom Sign-up callback'
+        event: 'Sign-up'
+        fn: (event, props, opts, cb) ->
+          console.log "custom event!"
       ]
-  }
+    }
+    """, bare: true
+
+  # clean up generated coffee-script
+  config = config.replace '({', '{'
+  config = config.replace '});\n', '}'
 
   # build bundled analytics (that snippet will load) for testing
   bundleJs = fs.readFileSync 'src/bundle.coffee', 'utf-8'
   bundleJs = coffee.compile bundleJs, bare: true
-  bundleJs = bundleJs.replace /initialize\({}\)/, "initialize(#{JSON.stringify config})"
+  bundleJs = bundleJs.replace /initialize\({}\)/, "initialize(#{config})"
 
   require('requisite').bundle entry: 'src/index.coffee', (err, bundle) ->
     analyticsJs = bundle.toString()
