@@ -17,18 +17,14 @@ module.exports = class GoogleAnalytics extends Integration
   constructor: (@opts) ->
 
   init: ->
-    return if window.ga?
-
     window.GoogleAnalyticsObject = 'ga'
 
-    ga = ->
-      ga.q ?= []
-      ga.q.push arguments
+    window.ga ?= ->
+      window.ga.q ?= []
+      window.ga.q.push arguments
       return
 
     ga.l = 1 * new Date()
-    window.ga = ga
-
     ga 'create', @opts.id, 'auto'
 
   addProduct: (props) ->
