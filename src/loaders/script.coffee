@@ -5,12 +5,13 @@ module.exports = (opts, cb) ->
   onload script, cb
 
   script.async = opts.async ? 1
-  script.src = opts.src
+  script.src = opts.url
 
-  for k,v of opts.attrs
-    script.setAttribute k, v
+  if opts.attrs?
+    for k,v of opts.attrs
+      script.setAttribute k, v
 
-  script.text = '' + opts.text if opts.text
+  script.text = '' + opts.text if opts.text?
 
   head = document.head or document.getElementsByTagName('head')[0]
   head.parentNode.insertBefore script, head

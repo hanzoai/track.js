@@ -13,8 +13,8 @@ module.exports = class Integration
 
     switch @src.type
       when 'script'
-        loadScript @src.url, cb
+        loadScript @src, cb
       when 'img'
-        loadImg @src.url, cb
+        loadImg @src, cb
       when 'iframe'
-        loadIframe @src.url, cb
+        loadIframe @src, cb

@@ -6,6 +6,6 @@ module.exports = (opts, cb) ->
 
   img.width = 1
   img.height = 1
-  img.src = opts.src
+  img.src = opts.url
 
   img
