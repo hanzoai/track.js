@@ -9,6 +9,12 @@ parseValue = (value) ->
       value = parseInt value, 10
   value
 
+parseCurrency = (value) ->
+  if typeof value == 'string'
+    value
+  else if typeof value == 'number'
+    value.toFixed 2
+
 # Google Analytics hates undefined/null properties, send them an object w/o
 # keys pointing to such things.
 payload = (opts = {}) ->
@@ -46,7 +52,7 @@ module.exports = class GoogleAnalytics extends Integration
       coupon:   props.coupon
       currency: props.currency
       name:     props.name
-      price:    props.price
+      price:    parseCurrency props.price
       quantity: props.quantity
       variant:  props.variant
 
@@ -144,9 +150,9 @@ module.exports = class GoogleAnalytics extends Integration
     @setAction 'purchase',
       id:          props.orderId
       affiliation: props.affiliation
-      revenue:     props.total ? props.revenue
-      tax:         props.tax
-      shipping:    props.shipping
+      revenue:     parseCurrency props.total ? props.revenue
+      tax:         parseCurrency props.tax
+      shipping:    parseCurrency props.shipping
       coupon:      props.coupon
 
     @sendEEEvent event, props
