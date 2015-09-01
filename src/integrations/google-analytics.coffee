@@ -157,3 +157,18 @@ module.exports = class GoogleAnalytics extends Integration
 
     @sendEEEvent event, props
     cb null
+
+  viewedCheckoutStep: (event, props, opts, cb = ->) ->
+    @setAction 'checkout',
+      steps: props.step ? 1
+      option: opts
+    @sendEEEvent event, props
+    cb null
+
+  completedCheckoutStep: (event, props, opts, cb = ->) ->
+    @setAction 'checkout_option',
+      steps: props.step ? 1
+      option: opts
+
+    @sendEEEvent event, props
+    cb null
