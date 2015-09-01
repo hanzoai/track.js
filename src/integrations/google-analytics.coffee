@@ -82,14 +82,15 @@ module.exports = class GoogleAnalytics extends Integration
     @log 'GoogleAnalytics.page', arguments
     name = category if arguments.length == 1
 
-    # ga 'set',
-    #   page:  opts.page
-    #   title: opts.title
+    payload = {}
+    payload.page = opts.page   if opts.page?
+    payload.title = opts.title if opts.title?
 
-    ga 'send', 'pageview',
-      page:     opts.page
-      title:    opts.title
-      location: opts.location
+    ga 'set', payload
+
+    payload.location = opts.location if opts.location?
+
+    ga 'send', 'pageview', payload
 
     cb null
 
