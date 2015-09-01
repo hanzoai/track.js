@@ -1,6 +1,6 @@
 Integration = require '../integration'
 
-# GA only accepts ints as values
+# Google Analytics only accepts ints as values
 parseValue = (value) ->
   if typeof value == 'string'
     if (value.indexOf '.') != -1
@@ -8,6 +8,15 @@ parseValue = (value) ->
     else
       value = parseInt value, 10
   value
+
+# Google Analytics hates undefined/null properties, send them an object w/o
+# keys pointing to such things.
+payload = (opts = {}) ->
+  data = {}
+  for k,v of opts
+    if v?
+      data[k] = v
+  data
 
 module.exports = class GoogleAnalytics extends Integration
   src:
@@ -30,7 +39,7 @@ module.exports = class GoogleAnalytics extends Integration
 
   addProduct: (props) ->
     @log 'GoogleAnalytics.addProduct', arguments
-    ga 'ec:addProduct',
+    ga 'ec:addProduct', payload
       id:       props.id ? props.sku
       brand:    props.brand
       category: props.category
@@ -43,7 +52,7 @@ module.exports = class GoogleAnalytics extends Integration
 
   setAction: (action, props) ->
     @log 'GoogleAnalytics.setAction', arguments
-    ga 'ec:setAction', action, props
+    ga 'ec:setAction', action, payload props
 
   sendEvent: (event, props = {}) ->
     @log 'GoogleAnalytics.sendEvent', arguments
@@ -64,7 +73,7 @@ module.exports = class GoogleAnalytics extends Integration
         data.campaignContent = campaign.content
         data.campaignKeyword = campaign.term
 
-    ga 'send', 'event', data
+    ga 'send', 'event', payload data
 
   sendEEEvent: (event, props) ->
     # props.nonInteraction = true
@@ -80,17 +89,9 @@ module.exports = class GoogleAnalytics extends Integration
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
     @log 'GoogleAnalytics.page', arguments
-    name = category if arguments.length == 1
 
-    payload = {}
-    payload.page = opts.page   if opts.page?
-    payload.title = opts.title if opts.title?
-
-    ga 'set', payload
-
-    payload.location = opts.location if opts.location?
-
-    ga 'send', 'pageview', payload
+    ga 'set', payload opts
+    ga 'send', 'pageview', payload opts
 
     cb null
 
