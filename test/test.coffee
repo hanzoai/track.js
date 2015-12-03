@@ -5,6 +5,7 @@ should = require('chai').should()
 
 describe "Analytics (#{process.env.BROWSER})", ->
   browser = getBrowser()
+
   testPage = "http://localhost:#{process.env.PORT ? 3333}/test.html"
 
   it 'Should load', ->
