@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hanzo/analytics.js.git"
+    "url": "git+https://github.com/hanzo-io/analytics.js.git"
   },
   "keywords": [
     "analytics",
