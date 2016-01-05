@@ -1,7 +1,7 @@
 {
   "name": "@hanzo/analytics.js",
   "version": "0.2.9",
-  "description": "Analytics support for Crowdstart.",
+  "description": "Analytics support for Hanzo.",
   "main": "lib",
   "devDependencies": {
     "bebop": "^1.3.6",
@@ -24,18 +24,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/crowdstart/analytics.git"
+    "url": "git+https://github.com/hanzo/analytics.js.git"
   },
   "keywords": [
     "analytics",
-    "crowdstart"
+    "hanzo"
   ],
-  "author": "\"author\": \"Zach Kelling <zk@crowdstart.com> (http://zeekay.io)",
+  "author": "\"author\": \"Zach Kelling <zk@hanzo.io> (http://hanzo.io)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/crowdstart/analytics/issues"
+    "url": "https://github.com/hanzo-io/analytics.js/issues"
   },
-  "homepage": "https://github.com/crowdstart/analytics#readme",
+  "homepage": "https://github.com/hanzo-io/analytics.js#readme",
   "dependencies": {
     "load-iframe": "^1.0.0",
     "load-script": "^1.0.0"
