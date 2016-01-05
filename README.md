@@ -4,5 +4,5 @@ use.
 
 ## Install
 ```shell
-npm install @hanzo/analytics
+npm install @hanzo/analytics.js
 ```
