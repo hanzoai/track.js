@@ -1,6 +1,6 @@
 {
   "name": "@hanzo/analytics.js",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Analytics support for Crowdstart.",
   "main": "lib",
   "devDependencies": {
