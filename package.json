@@ -1,5 +1,5 @@
 {
-  "name": "crowdstart-analytics",
+  "name": "@hanzo/analytics.js",
   "version": "0.2.8",
   "description": "Analytics support for Crowdstart.",
   "main": "lib",
