@@ -1,5 +1,11 @@
 Integration = require '../integration'
 
+parseCurrency = (value) ->
+  if typeof value == 'string'
+    value
+  else if typeof value == 'number'
+    value.toFixed 2
+
 module.exports = class FacebookAudiences extends Integration
   src:
     type: 'script'
@@ -60,6 +66,6 @@ module.exports = class FacebookAudiences extends Integration
   completedOrder: (event, props, opts, cb = ->) ->
     @log 'FacebookAudiences.completedOrder', arguments
     fbq 'track', 'Purchase',
-      value:    props.total
+      value:    parseCurrency props.total
       currency: props.currency ? 'USD'
     cb null
