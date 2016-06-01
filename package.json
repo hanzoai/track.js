@@ -1,6 +1,6 @@
 {
   "name": "@hanzo/analytics.js",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Analytics support for Hanzo.",
   "main": "lib",
   "devDependencies": {
