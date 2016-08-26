@@ -1,5 +1,7 @@
 exec = require('shortcake').exec
 
+use 'cake-version'
+
 option '-b', '--browser [browserName]', 'browser to test with'
 option '-g', '--grep [filter]', 'test filter'
 option '-v', '--version [<newversion> | major | minor | patch | build]', 'new version'
