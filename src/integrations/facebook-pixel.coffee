@@ -6,7 +6,7 @@ parseCurrency = (value) ->
   else if typeof value == 'number'
     value.toFixed 2
 
-module.exports = class FacebookAudiences extends Integration
+module.exports = class FacebookPixel extends Integration
   src:
     type: 'script'
     url: '//connect.facebook.net/en_US/fbevents.js'
@@ -33,7 +33,6 @@ module.exports = class FacebookAudiences extends Integration
     fbq 'track', 'PageView'
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
-    @log 'FacebookAudiences.page', arguments
     fbq 'track', 'ViewContent'
     cb null
 
@@ -54,17 +53,14 @@ module.exports = class FacebookAudiences extends Integration
     cb null
 
   viewedProduct: (event, props, opts, cb = ->) ->
-    @log 'FacebookAudiences.viewedProduct', arguments
     fbq 'track', 'ViewContent'
     cb null
 
   addedProduct: (event, props, opts, cb = ->) ->
-    @log 'FacebookAudiences.addedProduct', arguments
     fbq 'track', 'AddToCart'
     cb null
 
   completedOrder: (event, props, opts, cb = ->) ->
-    @log 'FacebookAudiences.completedOrder', arguments
     fbq 'track', 'Purchase',
       value:    parseCurrency props.total
       currency: props.currency ? 'USD'

@@ -8,8 +8,6 @@ module.exports = class Generic extends Integration
   track: (event, props, opts, cb = ->) ->
     return unless event == @opts.event
 
-    @log 'Generic.track', @opts.name, event, props, opts
-
     try
       @fn event, props, opts, cb
     catch err

@@ -44,7 +44,6 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'create', @opts.id, 'auto'
 
   addProduct: (props) ->
-    @log 'GoogleAnalytics.addProduct', arguments
     ga 'ec:addProduct', payload
       id:       props.id ? props.sku
       brand:    props.brand
@@ -57,11 +56,9 @@ module.exports = class GoogleAnalytics extends Integration
       variant:  props.variant
 
   setAction: (action, props) ->
-    @log 'GoogleAnalytics.setAction', arguments
     ga 'ec:setAction', action, payload props
 
   sendEvent: (event, props = {}) ->
-    @log 'GoogleAnalytics.sendEvent', arguments
 
     data =
       eventAction: event
@@ -87,28 +84,22 @@ module.exports = class GoogleAnalytics extends Integration
     @sendEvent event, props
 
   identify: (userId, traits, opts, cb = ->) ->
-    @log 'GoogleAnalytics.identify', arguments
     # Do not send PII as id or extra metadata as it's against the
     # Google Analytics terms of service.
     ga 'set', 'userId', userId
     cb null
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
-    @log 'GoogleAnalytics.page', arguments
-
     ga 'set', payload opts
     ga 'send', 'pageview', payload opts
 
     cb null
 
   track: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.track', arguments
     @sendEvent event, props
     cb null
 
   loadEnhancedEcommerce: (event, props = {}) ->
-    @log 'GoogleAnalytics.loadEnhancedEcommerce', arguments
-
     unless @_enhancedEcommerceLoaded
       ga 'require', 'ec'
       @_enhancedEcommerceLoaded = true
@@ -117,7 +108,6 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'set', '&cu', props.currency ? 'USD'
 
   viewedProduct: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.viewedProduct', arguments
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'detail', props
@@ -125,7 +115,6 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   addedProduct: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.addedProduct', arguments
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'add', props
@@ -133,7 +122,6 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   removedProduct: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.removedProduct', arguments
     @loadEnhancedEcommerce event, props
     @addProduct props
     @setAction 'remove', props
@@ -141,7 +129,6 @@ module.exports = class GoogleAnalytics extends Integration
     cb null
 
   completedOrder: (event, props, opts, cb = ->) ->
-    @log 'GoogleAnalytics.completedOrder', arguments
     @loadEnhancedEcommerce event, props
     return unless props.orderId? and props.products?
 

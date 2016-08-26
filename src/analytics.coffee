@@ -8,15 +8,19 @@ module.exports = class Analytics
     if typeof location != 'undefined'
       @_debug = location.search.indexOf('v=1') != -1
 
-    Integration::log = =>
-      @log.apply @, arguments
+    _this = @
+
+    Integration::log = ->
+      args = Array::slice.call arguments
+      args.unshift @constructor.name
+      _this.log.apply _this, args
 
   ready: (fn = ->) ->
-    @log 'Analytics.ready'
+    @log 'ready'
     fn()
 
   initialize: (opts = {}) ->
-    @log 'Analytics.initialize', opts
+    @log 'initialize', opts
     opts.integrations ?= []
 
     for integration in opts.integrations
@@ -28,25 +32,27 @@ module.exports = class Analytics
 
   # Call method for each integration
   call: (method, event, props, opts, cb = ->) ->
-    @log 'Analytics.call', method, event, props, opts
+    @log 'call', method, event, props, opts
     for integration in @integrations
       if integration[method]?
+        @log.call integration, method, event, props, opts
         integration[method].call integration, event, props, opts, cb
       else
+        @log.call integration, event, props, opts
         integration.track.call integration, event, props, opts, cb
 
   identify: (userId, traits, opts, cb) ->
-    @log 'Analytics.identify', arguments
+    @log 'identify', userId, traits, opts
     @call 'identify', userId, traits, opts, cb
 
   track: (event, props, opts, cb) ->
-    @log 'Analytics.track', event, props, opts
+    @log 'track', event, props, opts
     method = event.replace /\s+/g, ''
     method = method[0].toLowerCase() + method.substring 1
     @call method, event, props, opts, cb
 
   page: (category, name, props, opts, cb) ->
-    @log 'Analytics.page', arguments
+    @log 'page', category, name, props, opts
     @call 'page', category, name, props, opts, cb
 
   debug: (bool=true) ->

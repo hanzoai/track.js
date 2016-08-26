@@ -18,7 +18,6 @@ module.exports = class GoogleAdWords extends Integration
     super =>
       # replay event to clear queue
       if @queue.length
-        @log 'GoogleAdWords.load', 'replaying events:', @queue
         google_trackConversion event for event in @queue
       cb null
 
@@ -26,8 +25,6 @@ module.exports = class GoogleAdWords extends Integration
     name = category if arguments.length == 1
 
     return unless name == @opts.event
-
-    @log 'GoogleAdWords.page', arguments
 
     google_trackConversion
       google_conversion_id:    @opts.id
@@ -38,8 +35,6 @@ module.exports = class GoogleAdWords extends Integration
 
   track: (event, props, opts, cb = ->) ->
     return unless event == @opts.event
-
-    @log 'GoogleAdWords.track', arguments
 
     google_trackConversion
       google_conversion_id:       @opts.id

@@ -4,12 +4,11 @@ loadIframe = require './loaders/iframe'
 
 module.exports = class Integration
   init: ->
-    @log 'Integration.init'
 
   load: (cb = ->) ->
-    @log 'Integration.load', @src
+    return unless @src? and @src.type? and @src.url?
 
-    return unless @src?.type? and @src?.url?
+    @log 'load', @src
 
     switch @src.type
       when 'script'

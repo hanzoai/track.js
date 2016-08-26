@@ -23,8 +23,6 @@ module.exports = class FacebookConversions extends Integration
   track: (event, props, opts, cb = ->) ->
     return unless event == @opts.event
 
-    @log 'FacebookConversions.track', arguments
-
     id       = @opts.id
     value    = props.value    ? @opts.value    ? '0.00'
     currency = props.currency ? @opts.currency ? 'USD'
