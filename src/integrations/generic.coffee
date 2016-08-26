@@ -3,18 +3,14 @@ Integration = require '../integration'
 module.exports = class Generic extends Integration
   constructor: (@opts) ->
     @src ?= @opts.src
-
-  init: ->
-    return if window._fbq?
-    window._fbq = []
-
-  page: (category, name, props, opts, cb) ->
-    name = category if arguments.length == 1
-    @track name, props, opts, cb
+    @fn   = new Function @opts.code
 
   track: (event, props, opts, cb = ->) ->
     return unless event == @opts.event
 
     @log 'Generic.track', @opts.name, event, props, opts
 
-    @opts.fn event, props, opts, cb
+    try
+      @opts.fn event, props, opts, cb
+    catch err
+      @log "Generic integration failed, #{err.toString()}"
