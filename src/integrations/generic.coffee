@@ -11,6 +11,6 @@ module.exports = class Generic extends Integration
     @log 'Generic.track', @opts.name, event, props, opts
 
     try
-      @opts.fn event, props, opts, cb
+      @fn event, props, opts, cb
     catch err
       @log "Generic integration failed, #{err.toString()}"

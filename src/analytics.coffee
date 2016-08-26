@@ -4,6 +4,10 @@ module.exports = class Analytics
   constructor: ->
     @integrations = []
 
+    # Easily flip on debug
+    if typeof location != 'undefined'
+      @_debug = location.search.indexOf('v=1') != -1
+
     Integration::log = =>
       @log.apply @, arguments
 
@@ -45,7 +49,7 @@ module.exports = class Analytics
     @log 'Analytics.page', arguments
     @call 'page', category, name, props, opts, cb
 
-  debug: (bool = true) ->
+  debug: (bool=true) ->
     @_debug = bool
 
   log: ->
