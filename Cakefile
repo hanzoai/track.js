@@ -1,6 +1,7 @@
 exec = require('shortcake').exec
 
 use 'cake-version'
+use 'cake-publish'
 
 option '-b', '--browser [browserName]', 'browser to test with'
 option '-g', '--grep [filter]', 'test filter'
@@ -64,15 +65,6 @@ task 'build', 'build project', (options) ->
 
 task 'watch', 'watch for changes and recompile project', ->
   exec 'node_modules/.bin/coffee -bcmw -o lib/ src/'
-
-task 'publish', 'publish project', (options) ->
-  newVersion = options.version ? 'patch'
-
-  exec """
-  git push
-  npm version #{newVersion}
-  npm publish
-  """.split '\n'
 
 task 'static-server', 'Run static server for tests', ->
   connect = require 'connect'
