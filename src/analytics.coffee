@@ -24,8 +24,8 @@ module.exports = class Analytics
     opts.integrations ?= []
 
     for integration in opts.integrations
-      constructor = require './integrations/' + integration.type
-      instance = new constructor integration
+      Constructor = require './integrations/' + integration.type
+      instance = new Constructor integration
       instance.init()
       instance.load()
       @integrations.push instance
@@ -35,10 +35,10 @@ module.exports = class Analytics
     @log 'call', method, event, props, opts
     for integration in @integrations
       if integration[method]?
-        @log.call integration, method, event, props, opts
+        integration.log method, event, props, opts
         integration[method].call integration, event, props, opts, cb
       else
-        @log.call integration, event, props, opts
+        integration.log event, props, opts
         integration.track.call integration, event, props, opts, cb
 
   identify: (userId, traits, opts, cb) ->
