@@ -29,7 +29,7 @@ task 'build', 'build project', (options) ->
         type: 'google-analytics'
         id: 'UA-65099214-1'
       ,
-        type: 'facebook-audiences'
+        type: 'facebook-pixel'
         id: '920910517982389'
       ,
         type: 'google-adwords'
