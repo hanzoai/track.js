@@ -29,6 +29,7 @@ module.exports = class Analytics
       instance.init()
       instance.load()
       @integrations.push instance
+    @
 
   # Call method for each integration
   call: (method, event, props, opts, cb = ->) ->
@@ -40,6 +41,7 @@ module.exports = class Analytics
       else
         integration.log event, props, opts
         integration.track.call integration, event, props, opts, cb
+    @
 
   identify: (userId, traits, opts, cb) ->
     @log 'identify', userId, traits, opts
