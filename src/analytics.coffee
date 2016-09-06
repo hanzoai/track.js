@@ -39,8 +39,8 @@ module.exports = class Analytics
         integration.log method, event, props, opts
         integration[method].call integration, event, props, opts, cb
       else
-        integration.log event, props, opts
-        integration.track.call integration, event, props, opts, cb
+        integration.log (event ? method), props, opts
+        integration.track.call integration, (event ? method), props, opts, cb
     @
 
   identify: (userId, traits, opts, cb) ->

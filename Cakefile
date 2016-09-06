@@ -40,7 +40,7 @@ task 'build', 'build project', (options) ->
         event: 'Sign-up'
         id: '6025763568614'
       ,
-        type: 'generic'
+        type: 'custom'
         name: 'Custom Sign-up callback'
         event: 'Sign-up'
         fn: (event, props, opts, cb) ->

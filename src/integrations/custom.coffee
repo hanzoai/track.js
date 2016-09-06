@@ -1,6 +1,6 @@
 Integration = require '../integration'
 
-module.exports = class Generic extends Integration
+module.exports = class Custom extends Integration
   constructor: (@opts) ->
     @src ?= @opts.src
     @fn   = new Function @opts.code
@@ -11,4 +11,4 @@ module.exports = class Generic extends Integration
     try
       @fn event, props, opts, cb
     catch err
-      @log "Generic integration failed, #{err.toString()}"
+      @log "Custom integration failed, #{err.toString()}"
