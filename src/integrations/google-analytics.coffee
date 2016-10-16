@@ -45,18 +45,6 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'create', @opts.id, 'auto'
     @loadLinkAttribution() if opts.enableLinkAttribution
 
-  addProduct: (props) ->
-    ga 'ec:addProduct', payload
-      id:       props.id ? props.sku
-      brand:    props.brand
-      category: props.category
-      coupon:   props.coupon
-      currency: props.currency
-      name:     props.name
-      price:    parseCurrency props.price
-      quantity: props.quantity
-      variant:  props.variant
-
   setAction: (action, props) ->
     ga 'ec:setAction', action, payload props
 
@@ -85,7 +73,7 @@ module.exports = class GoogleAnalytics extends Integration
     props.category ?= 'EnhancedEcommerce'
     @sendEvent event, props
 
-  identify: (userId, traits, opts, cb = ->) ->
+  identify: (userId, props, opts, cb = ->) ->
     # Do not send PII as id or extra metadata as it's against the Google
     # Analytics terms of service.
     ga 'set', 'userId', userId
@@ -113,6 +101,18 @@ module.exports = class GoogleAnalytics extends Integration
 
     # Ensure we set currency for every hit
     ga 'set', '&cu', props.currency ? 'USD'
+
+  addProduct: (props) ->
+    ga 'ec:addProduct', payload
+      id:       props.sku ? props.id
+      brand:    props.brand
+      category: props.category
+      coupon:   props.coupon
+      currency: props.currency
+      name:     props.name
+      price:    parseCurrency props.price
+      quantity: props.quantity
+      variant:  props.variant
 
   viewedProduct: (event, props, opts, cb = ->) ->
     @sendEEvent event, props
