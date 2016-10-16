@@ -41,7 +41,9 @@ module.exports = class GoogleAnalytics extends Integration
       i[r].l = 1 * new Date
     ) window, document, '', '', 'ga'
     window.GoogleAnalyticsObject = 'ga'
+
     ga 'create', @opts.id, 'auto'
+    @loadLinkAttribution() if opts.enableLinkAttribution
 
   addProduct: (props) ->
     ga 'ec:addProduct', payload
@@ -59,7 +61,6 @@ module.exports = class GoogleAnalytics extends Integration
     ga 'ec:setAction', action, payload props
 
   sendEvent: (event, props = {}) ->
-
     data =
       eventAction: event
 
@@ -78,14 +79,15 @@ module.exports = class GoogleAnalytics extends Integration
 
     ga 'send', 'event', payload data
 
-  sendEEEvent: (event, props) ->
+  sendEEvent: (event, props) ->
+    @loadEcommerce event, props
     # props.nonInteraction = true
     props.category ?= 'EnhancedEcommerce'
     @sendEvent event, props
 
   identify: (userId, traits, opts, cb = ->) ->
-    # Do not send PII as id or extra metadata as it's against the
-    # Google Analytics terms of service.
+    # Do not send PII as id or extra metadata as it's against the Google
+    # Analytics terms of service.
     ga 'set', 'userId', userId
     cb null
 
@@ -99,41 +101,42 @@ module.exports = class GoogleAnalytics extends Integration
     @sendEvent event, props
     cb null
 
-  loadEnhancedEcommerce: (event, props = {}) ->
-    unless @_enhancedEcommerceLoaded
+  loadLinkAttribution: (event, props = {}) ->
+    unless @_loadedLinkAttribution
+      ga 'require', 'linkid', props
+      @_loadedLinkAttribution = true
+
+  loadEcommerce: (event, props = {}) ->
+    unless @_loadedEcommerce
       ga 'require', 'ec'
-      @_enhancedEcommerceLoaded = true
+      @_loadedEcommerce = true
 
     # Ensure we set currency for every hit
     ga 'set', '&cu', props.currency ? 'USD'
 
   viewedProduct: (event, props, opts, cb = ->) ->
-    @loadEnhancedEcommerce event, props
+    @sendEEvent event, props
     @addProduct props
     @setAction 'detail', props
-    @sendEEEvent event, props
     cb null
 
   addedProduct: (event, props, opts, cb = ->) ->
-    @loadEnhancedEcommerce event, props
+    @sendEEvent event, props
     @addProduct props
     @setAction 'add', props
-    @sendEEEvent event, props
     cb null
 
   removedProduct: (event, props, opts, cb = ->) ->
-    @loadEnhancedEcommerce event, props
+    @sendEEvent event, props
     @addProduct props
     @setAction 'remove', props
-    @sendEEEvent event, props
     cb null
 
   completedOrder: (event, props, opts, cb = ->) ->
-    @loadEnhancedEcommerce event, props
     return unless props.orderId? and props.products?
 
+    @sendEEvent event, props
     @addProduct product for product in props.products
-
     @setAction 'purchase',
       id:          props.orderId
       affiliation: props.affiliation
@@ -141,21 +144,18 @@ module.exports = class GoogleAnalytics extends Integration
       tax:         parseCurrency props.tax
       shipping:    parseCurrency props.shipping
       coupon:      props.coupon
-
-    @sendEEEvent event, props
     cb null
 
   viewedCheckoutStep: (event, props, opts, cb = ->) ->
+    @sendEEvent event, props
     @setAction 'checkout',
       steps: props.step ? 1
       option: opts
-    @sendEEEvent event, props
     cb null
 
   completedCheckoutStep: (event, props, opts, cb = ->) ->
+    @sendEEvent event, props
     @setAction 'checkout_option',
       steps: props.step ? 1
       option: opts
-
-    @sendEEEvent event, props
     cb null
