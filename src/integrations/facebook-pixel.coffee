@@ -33,7 +33,7 @@ module.exports = class FacebookPixel extends Integration
     fbq 'track', 'PageView'
 
   page: (category, name, props = {}, opts = {}, cb = ->) ->
-    fbq 'track', 'ViewContent'
+    # Nothing to do as FB tracks this automatically
     cb null
 
   track: (event, props, opts, cb = ->) ->
