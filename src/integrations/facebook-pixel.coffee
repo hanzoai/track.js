@@ -13,21 +13,15 @@ module.exports = class FacebookPixel extends Integration
 
   constructor: (@opts) ->
     @opts.values ?= {}
+    @opts.values.currency ?= 'USD'
     @opts.values.viewedProduct ?=
       percent: 0.0001
-      currency: 'USD'
-
     @opts.values.addedProduct ?=
       percent: 0.001
-      currency: 'USD'
-
     @opts.values.initiateCheckout ?=
       percent: 0.01
-      currency: 'USD'
-
     @opts.values.addPaymentInfo ?=
       percent: 0.02
-      currency: 'USD'
 
   init: ->
     return if window.fbq?
@@ -54,19 +48,19 @@ module.exports = class FacebookPixel extends Integration
       fbq 'init', @opts.id
     return
 
-  identify: (userId, props, opts, cb = ->) ->
+  identify: (userId, props, cb) ->
     @identity =
       em: props.email
       ph: props.phone
       fn: props.firstName
     cb null
 
-  page: (category, name, props = {}, opts = {}, cb = ->) ->
+  page: (category, name, props, cb) ->
     # fbq 'track', 'PageView'
     # Nothing to do as FB tracks this automatically
     cb null
 
-  track: (event, props, opts, cb = ->) ->
+  track: (event, props, cb) ->
     switch event
       when 'Lead'
         fbq 'track', 'Lead'
@@ -80,7 +74,7 @@ module.exports = class FacebookPixel extends Integration
         fbq 'track', 'AddToWishList'
     cb null
 
-  viewedCheckoutStep: (event, props, opts, cb = ->) ->
+  viewedCheckoutStep: (event, props, cb) ->
     return if props.step? and props.step > 1
     fbq 'track', 'InitiateCheckout'
       # value:    props.value
@@ -89,16 +83,18 @@ module.exports = class FacebookPixel extends Integration
       # content_category: ''
       # content_ids: ''
       # num_items: ''
+    cb null
 
-  completedCheckoutStep: (event, props, opts, cb = ->) ->
+  completedCheckoutStep: (event, props, cb) ->
     return if props.step? and props.step > 1
     fbq 'track', 'AddPaymentInfo'
       # value:    props.value
       # currency: props.currency ? 'USD'
       # content_category: ''
       # content_ids: ''
+    cb null
 
-  viewedProduct: (event, props, opts, cb = ->) ->
+  viewedProduct: (event, props, cb) ->
     fbq 'track', 'ViewContent',
       # value:    props.value
       # currency: props.currency ? 'USD'
@@ -106,7 +102,7 @@ module.exports = class FacebookPixel extends Integration
       content_ids:   [props.id]
     cb null
 
-  addedProduct: (event, props, opts, cb = ->) ->
+  addedProduct: (event, props, cb) ->
     fbq 'track', 'AddToCart',
       # value:    props.value
       # currency: props.currency ? 'USD'
@@ -114,7 +110,7 @@ module.exports = class FacebookPixel extends Integration
       content_ids:   [props.id]
     cb null
 
-  completedOrder: (event, props, opts, cb = ->) ->
+  completedOrder: (event, props, cb) ->
     ids = (product.sku ? product for product in props.products)
     fbq 'track', 'Purchase',
       value:    parseCurrency props.total

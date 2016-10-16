@@ -32,32 +32,32 @@ module.exports = class Analytics
     @
 
   # Call method for each integration
-  call: (method, event, props, opts, cb = ->) ->
-    @log 'call', method, event, props, opts
+  call: (method, event, props, cb = ->) ->
+    @log 'call', method, event, props
     for integration in @integrations
       if integration[method]?
-        integration.log method, event, props, opts
-        integration[method].call integration, event, props, opts, cb
+        integration.log method, event, props
+        integration[method].call integration, event, props, cb
       else
-        integration.log (event ? method), props, opts
-        integration.track.call integration, (event ? method), props, opts, cb
+        integration.log (event ? method), props
+        integration.track.call integration, (event ? method), props, cb
     @
 
-  identify: (userId, traits, opts, cb) ->
-    @log 'identify', userId, traits, opts
-    @call 'identify', userId, traits, opts, cb
+  identify: (userId, props, cb = ->) ->
+    @log 'identify', userId, props
+    @call 'identify', userId, props, cb
 
-  track: (event, props, opts, cb) ->
-    @log 'track', event, props, opts
+  track: (event, props, cb = ->) ->
+    @log 'track', event, props
     method = event.replace /\s+/g, ''
     method = method[0].toLowerCase() + method.substring 1
-    @call method, event, props, opts, cb
+    @call method, event, props, cb
 
-  page: (category, name, props, opts, cb) ->
-    @log 'page', category, name, props, opts
-    @call 'page', category, name, props, opts, cb
+  page: (category, name, props, cb = ->) ->
+    @log 'page', category, name, props
+    @call 'page', category, name, props, cb
 
-  debug: (bool=true) ->
+  debug: (bool = true) ->
     @_debug = bool
 
   log: ->

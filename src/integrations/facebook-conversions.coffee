@@ -16,11 +16,11 @@ module.exports = class FacebookConversions extends Integration
     super
     _fbq.loaded = true
 
-  page: (category, name, props, opts, cb) ->
+  page: (category, name, props, cb) ->
     name = category if arguments.length == 1
-    @track name, props, opts, cb
+    @track name, props, cb
 
-  track: (event, props, opts, cb = ->) ->
+  track: (event, props, cb) ->
     return unless event == @opts.event
 
     id       = @opts.id

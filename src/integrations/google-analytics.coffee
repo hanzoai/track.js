@@ -17,9 +17,9 @@ parseCurrency = (value) ->
 
 # Google Analytics hates undefined/null properties, send them an object w/o
 # keys pointing to such things.
-payload = (opts = {}) ->
+payload = (props = {}) ->
   data = {}
-  for k,v of opts
+  for k,v of props
     if v?
       data[k] = v
   data
@@ -43,12 +43,12 @@ module.exports = class GoogleAnalytics extends Integration
     window.GoogleAnalyticsObject = 'ga'
 
     ga 'create', @opts.id, 'auto'
-    @loadLinkAttribution() if opts.enableLinkAttribution
+    @loadLinkAttribution()
 
   setAction: (action, props) ->
     ga 'ec:setAction', action, payload props
 
-  sendEvent: (event, props = {}) ->
+  sendEvent: (event, props) ->
     data =
       eventAction: event
 
@@ -73,28 +73,29 @@ module.exports = class GoogleAnalytics extends Integration
     props.category ?= 'EnhancedEcommerce'
     @sendEvent event, props
 
-  identify: (userId, props, opts, cb = ->) ->
+  identify: (userId, props, cb) ->
     # Do not send PII as id or extra metadata as it's against the Google
     # Analytics terms of service.
     ga 'set', 'userId', userId
     cb null
 
-  page: (category, name, props = {}, opts = {}, cb = ->) ->
-    ga 'set', payload opts
-    ga 'send', 'pageview', payload opts
-
+  page: (category, name, props, cb) ->
+    ga 'set', payload props
+    ga 'send', 'pageview', payload props
     cb null
 
-  track: (event, props, opts, cb = ->) ->
+  track: (event, props, cb) ->
     @sendEvent event, props
     cb null
 
-  loadLinkAttribution: (event, props = {}) ->
+  loadLinkAttribution: ->
+    return unless @opts.linkAttribution?
+
     unless @_loadedLinkAttribution
-      ga 'require', 'linkid', props
+      ga 'require', 'linkid', @opts.linkAttribution
       @_loadedLinkAttribution = true
 
-  loadEcommerce: (event, props = {}) ->
+  loadEcommerce: (props = {}) ->
     unless @_loadedEcommerce
       ga 'require', 'ec'
       @_loadedEcommerce = true
@@ -114,25 +115,25 @@ module.exports = class GoogleAnalytics extends Integration
       quantity: props.quantity
       variant:  props.variant
 
-  viewedProduct: (event, props, opts, cb = ->) ->
+  viewedProduct: (event, props, cb) ->
     @sendEEvent event, props
     @addProduct props
     @setAction 'detail', props
     cb null
 
-  addedProduct: (event, props, opts, cb = ->) ->
+  addedProduct: (event, props, cb) ->
     @sendEEvent event, props
     @addProduct props
     @setAction 'add', props
     cb null
 
-  removedProduct: (event, props, opts, cb = ->) ->
+  removedProduct: (event, props, cb) ->
     @sendEEvent event, props
     @addProduct props
     @setAction 'remove', props
     cb null
 
-  completedOrder: (event, props, opts, cb = ->) ->
+  completedOrder: (event, props, cb) ->
     return unless props.orderId? and props.products?
 
     @sendEEvent event, props
@@ -146,16 +147,16 @@ module.exports = class GoogleAnalytics extends Integration
       coupon:      props.coupon
     cb null
 
-  viewedCheckoutStep: (event, props, opts, cb = ->) ->
+  viewedCheckoutStep: (event, props, cb) ->
     @sendEEvent event, props
     @setAction 'checkout',
-      steps: props.step ? 1
-      option: opts
+      step:   props.step ? 1
+      option: props.option
     cb null
 
-  completedCheckoutStep: (event, props, opts, cb = ->) ->
+  completedCheckoutStep: (event, props, cb) ->
     @sendEEvent event, props
     @setAction 'checkout_option',
-      steps: props.step ? 1
-      option: opts
+      step:   props.step ? 1
+      option: props.option
     cb null

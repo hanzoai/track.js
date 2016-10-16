@@ -14,14 +14,14 @@ module.exports = class GoogleAdWords extends Integration
     window.google_trackConversion = (event) =>
       @queue.push event
 
-  load: (cb = ->) ->
+  load: (cb) ->
     super =>
       # replay event to clear queue
       if @queue.length
         google_trackConversion event for event in @queue
       cb null
 
-  page: (category, name, props, opts, cb = ->) ->
+  page: (category, name, props, cb) ->
     name = category if arguments.length == 1
 
     return unless name == @opts.event
@@ -33,7 +33,7 @@ module.exports = class GoogleAdWords extends Integration
 
     cb null
 
-  track: (event, props, opts, cb = ->) ->
+  track: (event, props, cb) ->
     return unless event == @opts.event
 
     google_trackConversion
