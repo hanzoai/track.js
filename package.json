@@ -4,20 +4,21 @@
   "description": "Analytics support for Hanzo.",
   "main": "lib",
   "devDependencies": {
-    "bebop": "^1.3.6",
+    "bebop": "1.9.3",
     "cake-publish": "0.1.1",
+    "cake-test": "0.1.0",
     "cake-version": "0.1.9",
-    "chai": "^3.1.0",
-    "coffee-script": "^1.9.3",
+    "chai": "3.5.0",
+    "coffee-script": "1.11.1",
     "connect": "^3.4.0",
     "executive": "^0.4.8",
-    "mocha": "^2.2.5",
-    "requisite": "^1.9.16",
-    "selenium-standalone": "^4.4.2",
+    "mocha": "3.1.2",
+    "requisite": "1.18.10",
+    "selenium-standalone": "5.7.2",
     "serve-static": "^1.10.0",
     "shortcake": "1.1.18",
-    "uglify-js": "^2.4.23",
-    "webdriverio": "^2.4.5"
+    "uglify-js": "2.7.3",
+    "webdriverio": "4.2.16"
   },
   "scripts": {
     "prepublish": "node_modules/.bin/cake build",
@@ -38,6 +39,7 @@
   },
   "homepage": "https://github.com/hanzo-io/analytics.js#readme",
   "dependencies": {
+    "cake-publish": "0.1.5",
     "load-iframe": "^1.0.0",
     "load-script": "^1.0.0"
   }

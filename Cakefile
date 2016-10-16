@@ -98,7 +98,7 @@ task 'test', 'Run tests', (options) ->
       process.exit 1 if err?
       process.exit 0
 
-task 'test-ci', 'Run tests on CI server', ->
+task 'test:ci', 'Run tests on CI server', ->
   invoke 'static-server'
 
   browsers = require './test/_browsers'
