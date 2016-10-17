@@ -1,4 +1,5 @@
 {safariPrivateBrowsing, tld} = require './utils'
+{document, window} = require './browser'
 
 # Default session storage
 localStorage = -> require 'store'

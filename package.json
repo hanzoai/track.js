@@ -11,6 +11,7 @@
     "chai": "3.5.0",
     "coffee-script": "1.11.1",
     "connect": "3.5.0",
+    "jsdom": "9.8.0",
     "mocha": "3.1.2",
     "requisite": "1.18.10",
     "selenium-standalone": "5.7.2",

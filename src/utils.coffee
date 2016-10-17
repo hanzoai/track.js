@@ -24,7 +24,11 @@ exports.onload = (el, cb) ->
     attach el, cb
 
 exports.tld = (domain) ->
-  (domain.match /[^.\s\/]+\.([a-z]{3,}|[a-z]{2}.[a-z]{2})$/)[0]
+  match = domain.match /[^.\s\/]+\.([a-z]{3,}|[a-z]{2}.[a-z]{2})$/
+  if match?
+    match[0]
+  else
+    domain
 
 exports.safariPrivateBrowsing = ->
   try
