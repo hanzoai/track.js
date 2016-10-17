@@ -1,18 +1,23 @@
 session = require './session'
 {uuid}  = require './utils'
 
-identity = ->
-  traits = (session.get 'identity') ? {}
-  unless traits.userId?
-    traits.userId = uuid()
-  traits
+class Identity
+  constructor: ->
+    props = (session.get 'identity') ? {}
+    for k,v of props
+      @[k] = v
+    unless @userId? or @anonId?
+      @anonId = uuid()
 
-identity.set = (k, v) ->
-  traits = identity()
-  traits[k] = v
-  session.set 'identity', traits
+  set: (k, v) ->
+    traits = identity()
+    traits[k] = v
+    session.set 'identity', traits
 
-identity.clear = ->
-  session.remove 'identity'
+  clear: ->
+    session.remove 'identity'
 
-module.exports = identity
+  id: ->
+    @userId ? @anonId
+
+module.exports = new Identity

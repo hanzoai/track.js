@@ -21,6 +21,14 @@ module.exports = class Integration
 
     switch @src.type
       when 'script'
+        switch typeof @src.url
+          when 'object'
+            if window.location.protocol == 'https:'
+              @src.url = @src.url.https
+            else
+              @src.url = @src.url.http
+          when 'function'
+            @src.url = @src.url.call @
         loadScript @src, cb
       when 'img'
         loadImg @src, cb

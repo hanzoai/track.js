@@ -59,6 +59,8 @@ module.exports = class Analytics
   referrer: ->
     page.referrer()
 
+  identity: -> require './identity'
+
   # Call method for each integration
   call: (event, args...) ->
     @log 'call', event, args...
