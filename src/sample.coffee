@@ -1,12 +1,13 @@
 session = require './session'
 
-module.exports = (sample, sampling = 1) ->
-  if (sampled = (session.get sample))?
+module.exports = (name, pct = 1) ->
+  key = 'sample:' + name
+  if (sampled = (session.get key))?
     return sampled
 
-  if Math.random() < sampling
-    session.set sample, false
+  if Math.random() < pct
+    session.set key, false
     return false
   else
-    session.set sample, true
+    session.set key, true
     return true

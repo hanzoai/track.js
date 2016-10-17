@@ -1,9 +1,18 @@
-loadScript = require './loaders/script'
-loadImg    = require './loaders/img'
 loadIframe = require './loaders/iframe'
+loadImg    = require './loaders/img'
+loadScript = require './loaders/script'
+sample     = require './sample'
 
 module.exports = class Integration
   init: ->
+
+  name: -> @opts.type
+
+  sample: ->
+    # If sampling is defined, use that to control whether that integration does anything or not
+    if @opts.sample?
+      return sample @name(), @opts.sample
+    true
 
   load: (cb = ->) ->
     return unless @src? and @src.type? and @src.url?

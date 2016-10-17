@@ -1,5 +1,5 @@
 Integration = require './integration'
-page = require './page'
+page        = require './page'
 
 methodName = (event) ->
   name = event.replace /\s+/g, ''
@@ -23,7 +23,7 @@ module.exports = class Analytics
     _this = @
     Integration::log = ->
       args = Array::slice.call arguments
-      args.unshift @constructor.name
+      args.unshift @name()
       _this.log.apply _this, args
 
   debug: (bool = true) ->
@@ -43,10 +43,13 @@ module.exports = class Analytics
     for opts in integrations
       do (opts) =>
         Constructor = require './integrations/' + opts.type
-        integration = new Constructor opts
-        integration.init()
-        integration.load()
-        @integrations.push integration
+        int = new Constructor opts
+        if int.sample()
+          int.init()
+          int.load()
+          @integrations.push int
+        else
+          @log 'not sampling', int.name()
 
     @referrer() # Try to preserve referrer for later
 
@@ -62,14 +65,14 @@ module.exports = class Analytics
 
     method = methodName event
 
-    for integration in @integrations
-      if integration[method]?
-        integration.log method, args...
-        integration[method].call integration, args...
+    for int in @integrations
+      if int[method]?
+        int.log method, args...
+        int[method].call int, args...
       else
-        if integration.track?
-          integration.log 'track', event, args...
-          integration.track.call integration, event, args...
+        if int.track?
+          int.log 'track', event, args...
+          int.track.call int, event, args...
     return
 
   identify: (userId, props, cb) ->
