@@ -17,8 +17,9 @@ module.exports = class Analytics
     if typeof location != 'undefined'
       @_debug = location.search.indexOf('v=1') != -1
 
+    # Selectively bind this so that log method knows which constructor it's
+    # logging for
     _this = @
-
     Integration::log = ->
       args = Array::slice.call arguments
       args.unshift @constructor.name
@@ -34,42 +35,45 @@ module.exports = class Analytics
     @log 'ready'
     cb()
 
-  initialize: (opts = {}) ->
-    @log 'initialize', opts
-    opts.integrations ?= []
-
-    for integration in opts.integrations
-      Constructor = require './integrations/' + integration.type
-      instance = new Constructor integration
-      instance.init()
-      instance.load()
-      @integrations.push instance
-    @
+  initialize: ({integrations = []}) ->
+    @log 'initialize', integrations
+    for opts in integrations
+      do (opts) =>
+        Constructor = require './integrations/' + opts.type
+        integration = new Constructor opts
+        integration.init()
+        integration.load()
+        @integrations.push integration
+    return
 
   # Call method for each integration
-  call: (event, props, cb) ->
-    @log 'call', event, props
+  call: (event, args...) ->
+    @log 'call', event, args...
+
     method = methodName event
+
     for integration in @integrations
       if integration[method]?
-        integration.log method, props
-        integration[method].call integration, event, props, cb
+        integration.log method, args...
+        integration[method].call integration, args...
       else
         if integration.track?
-          integration.log 'track', event, props
-          integration.track.call integration, event, props, cb
-    @
+          integration.log 'track', event, args...
+          integration.track.call integration, event, args...
+    return
 
   identify: (userId, props, cb) ->
     [props, cb] = normalizeCall props, cb
     props.userId ?= userId
     @log 'identify', props
-    @call 'identify', props, cb
+    @call 'identify', userId, props, cb
+    return
 
   track: (event, props, cb) ->
     [props, cb] = normalizeCall props, cb
     @log 'track', event, props
-    @call event, props, cb
+    @call 'track', event, props, cb
+    return
 
   page: (category, name, props, cb) ->
     [props, cb] = normalizeCall props, cb
@@ -78,7 +82,8 @@ module.exports = class Analytics
     if typeof name is 'string'
       props.name = name
     @log 'page', props
-    @call 'page', props, cb
+    @call 'page', category, name, props, cb
+    return
 
   # Un-implemented
   alias:       ->
