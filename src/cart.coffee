@@ -1,13 +1,13 @@
-data = Crowdstart?.Shop?.data
+module.exports = ->
+  data = Crowdstart?.Shop?.data
+  unless data?
+    return total: 0, items: [], ids: []
 
-module.exports =
-  total: ->
-    if data?
-      data.get 'order.total'
-    else
-      0
-  items:
-    if data?
-      data.get 'order.items'
-    else
-      []
+  items = data.get 'order.items'
+  ids = []
+  for item in items
+    ids.push item.sku ? item.id
+
+  total: data.get 'order.total'
+  items: items
+  ids:   ids

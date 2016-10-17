@@ -1,4 +1,5 @@
 Integration = require '../integration'
+cart        = require '../cart'
 
 parseCurrency = (value) ->
   if typeof value == 'string'
@@ -74,35 +75,57 @@ module.exports = class FacebookPixel extends Integration
         fbq 'track', 'AddToWishList'
     cb null
 
+  calcValue: (event, props = {}, total = 0) ->
+    total    = math.Max(props.total, total)
+    currency = props.currency ? @opts.values.currency
+
+    # Allow value to be overridden
+    if (value = props.values[event].value)?
+      return [value, currency]
+
+    # Calculate value as percentage of event total
+    value = props.values[event].percent * total
+    return [value, currency]
+
   viewedCheckoutStep: (event, props, cb) ->
     return if props.step? and props.step > 1
-    fbq 'track', 'InitiateCheckout'
-      # value:    props.value
-      # currency: props.currency ? 'USD'
-      # content_name: ''
+
+    {ids, total, items} = cart()
+    [value, currency] = @calcValue 'initiateCheckout', props, total
+
+    fbq 'track', 'InitiateCheckout',
       # content_category: ''
-      # content_ids: ''
-      # num_items: ''
+      content_ids: ids
+      # content_name: ''
+      currency:    currency
+      num_items:   items.length
+      value:       value
     cb null
 
   completedCheckoutStep: (event, props, cb) ->
     return if props.step? and props.step > 1
-    fbq 'track', 'AddPaymentInfo'
-      # value:    props.value
-      # currency: props.currency ? 'USD'
+
+    {ids, total} = cart()
+    [value, currency] = @calcValue 'addPaymentInfo', props, total
+
+    fbq 'track', 'AddPaymentInfo',
       # content_category: ''
-      # content_ids: ''
+      content_ids: ids
+      currency:    currency
+      value:       value
     cb null
 
   viewedProduct: (event, props, cb) ->
+    [value, currency] = @calcValue 'viewedProduct', props, props.price
     fbq 'track', 'ViewContent',
-      # value:    props.value
-      # currency: props.currency ? 'USD'
-      content_type: 'product'
       content_ids:   [props.id]
+      content_type: 'product'
+      currency:     currency
+      value:        value
     cb null
 
   addedProduct: (event, props, cb) ->
+    [value, currency] = @calcValue 'addedProduct', props, props.price
     fbq 'track', 'AddToCart',
       # value:    props.value
       # currency: props.currency ? 'USD'
