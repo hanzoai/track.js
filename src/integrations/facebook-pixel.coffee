@@ -38,7 +38,7 @@ module.exports = class FacebookPixel extends Integration
     fbq.loaded  = true
     fbq.version = '2.0'
     fbq.queue   = []
-    fbq.agent   = 'hanzo'
+    fbq.agent   = 'hza'
     # fbq.disablePushState = true # disable automatic page tracking
 
     window.fbq = window._fbq = fbq
