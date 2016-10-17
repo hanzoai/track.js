@@ -1,4 +1,5 @@
 Integration = require './integration'
+page = require './page'
 
 methodName = (event) ->
   name = event.replace /\s+/g, ''
@@ -37,6 +38,8 @@ module.exports = class Analytics
 
   initialize: ({integrations = []}) ->
     @log 'initialize', integrations
+
+    # Require and initialize integrations with included opts
     for opts in integrations
       do (opts) =>
         Constructor = require './integrations/' + opts.type
@@ -44,7 +47,14 @@ module.exports = class Analytics
         integration.init()
         integration.load()
         @integrations.push integration
+
+    @referrer() # Try to preserve referrer for later
+
     return
+
+  # Return our best guess as to proper referrer for this session
+  referrer: ->
+    page.referrer()
 
   # Call method for each integration
   call: (event, args...) ->

@@ -1,13 +1,12 @@
-safariPrivateBrowsing = ->
-  try
-    localStorage.t = 0
-    false
-  catch
-    true
+{safariPrivateBrowsing, tld} = require './utils'
 
+# Default session storage
+localStorage = -> require 'store'
+
+# Fallback to cookie storage to handle safari private browsing mode
 cookies = ->
   cookies = (require 'cookies-js') window
-  domain  = (document.domain.match /[^.\s\/]+\.([a-z]{3,}|[a-z]{2}.[a-z]{2})$/)[0]
+  domain  = tld document.domain
   key     = '_hza'
 
   state = ->
@@ -34,4 +33,4 @@ cookies = ->
   clear: ->
     cookies.expire key
 
-module.exports = if safariPrivateBrowsing() then cookies() else require 'store'
+module.exports = if safariPrivateBrowsing() then cookies() else localStorage()

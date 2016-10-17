@@ -22,3 +22,13 @@ exports.onload = (el, cb) ->
     add el, cb
   else
     attach el, cb
+
+exports.tld = (domain) ->
+  (domain.match /[^.\s\/]+\.([a-z]{3,}|[a-z]{2}.[a-z]{2})$/)[0]
+
+exports.safariPrivateBrowsing = ->
+  try
+    localStorage.t = 0
+    false
+  catch
+    true
