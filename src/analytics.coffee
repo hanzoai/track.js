@@ -1,5 +1,14 @@
 Integration = require './integration'
 
+methodName = (event) ->
+  name = event.replace /\s+/g, ''
+  name[0].toLowerCase() + name.substring 1
+
+normalizeCall = (props = {}, cb = ->) ->
+  if typeof props is 'function'
+    [props, cb] = [{}, cb]
+  [props, cb]
+
 module.exports = class Analytics
   constructor: ->
     @integrations = []
@@ -15,9 +24,15 @@ module.exports = class Analytics
       args.unshift @constructor.name
       _this.log.apply _this, args
 
-  ready: (fn = ->) ->
+  debug: (bool = true) ->
+    @_debug = bool
+
+  log: ->
+    console?.log.apply console, arguments if @_debug
+
+  ready: (cb = ->) ->
     @log 'ready'
-    fn()
+    cb()
 
   initialize: (opts = {}) ->
     @log 'initialize', opts
@@ -32,36 +47,38 @@ module.exports = class Analytics
     @
 
   # Call method for each integration
-  call: (method, event, props, cb = ->) ->
-    @log 'call', method, event, props
+  call: (event, props, cb) ->
+    @log 'call', event, props
+    method = methodName event
     for integration in @integrations
       if integration[method]?
-        integration.log method, event, props
+        integration.log method, props
         integration[method].call integration, event, props, cb
       else
-        integration.log (event ? method), props
-        integration.track.call integration, (event ? method), props, cb
+        if integration.track?
+          integration.log 'track', event, props
+          integration.track.call integration, event, props, cb
     @
 
-  identify: (userId, props, cb = ->) ->
-    @log 'identify', userId, props
-    @call 'identify', userId, props, cb
+  identify: (userId, props, cb) ->
+    [props, cb] = normalizeCall props, cb
+    props.userId ?= userId
+    @log 'identify', props
+    @call 'identify', props, cb
 
-  track: (event, props, cb = ->) ->
+  track: (event, props, cb) ->
+    [props, cb] = normalizeCall props, cb
     @log 'track', event, props
-    method = event.replace /\s+/g, ''
-    method = method[0].toLowerCase() + method.substring 1
-    @call method, event, props, cb
+    @call event, props, cb
 
-  page: (category, name, props, cb = ->) ->
-    @log 'page', category, name, props
-    @call 'page', category, name, props, cb
-
-  debug: (bool = true) ->
-    @_debug = bool
-
-  log: ->
-    console?.log.apply console, arguments if @_debug
+  page: (category, name, props, cb) ->
+    [props, cb] = normalizeCall props, cb
+    if typeof category is 'string'
+      props.category = category
+    if typeof name is 'string'
+      props.name = name
+    @log 'page', props
+    @call 'page', props, cb
 
   # Un-implemented
   alias:       ->
