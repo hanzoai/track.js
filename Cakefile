@@ -58,7 +58,10 @@ task 'build', 'build project', (options) ->
   bundleJs = coffee.compile bundleJs, bare: true
   bundleJs = bundleJs.replace /initialize\({}\)/, "initialize(#{config})"
 
-  require('requisite').bundle entry: 'src/index.coffee', (err, bundle) ->
+  require('requisite').bundle
+    entry: 'src/index.coffee'
+    exclude: /jsdom/
+  , (err, bundle) ->
     analyticsJs = bundle.toString()
     src = analyticsJs.replace /require\('\.\/index'\)/, bundleJs
     fs.writeFileSync 'test/fixtures/bundle.js', src, 'utf-8'
