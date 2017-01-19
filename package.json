@@ -14,7 +14,7 @@
     "jsdom": "9.8.0",
     "mocha": "3.1.2",
     "requisite": "1.19.0",
-    "selenium-standalone": "5.7.2",
+    "selenium-standalone": "5.11.1",
     "serve-static": "1.11.1",
     "shortcake": "1.1.18",
     "uglify-js": "2.7.3",
