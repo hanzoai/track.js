@@ -15,7 +15,7 @@
     "mocha": "3.1.2",
     "requisite": "1.19.0",
     "selenium-standalone": "5.7.2",
-    "serve-static": "1.11.1",
+    "serve-static": "1.11.2",
     "shortcake": "1.1.18",
     "uglify-js": "2.7.3",
     "webdriverio": "4.2.16"
