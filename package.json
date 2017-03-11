@@ -4,20 +4,20 @@
   "description": "Identify users and track interactions with [Hanzo's](https://hanzo.io) native solution for web analytics.",
   "main": "lib",
   "devDependencies": {
-    "bebop": "1.11.0",
+    "bebop": "1.11.5",
+    "cake-publish": "0.1.5",
     "cake-publish": "0.1.5",
     "cake-test": "0.1.0",
     "cake-version": "0.1.9",
     "chai": "3.5.0",
-    "coffee-script": "1.12.3",
+    "coffeescript": "1.12.4",
     "connect": "3.5.0",
+    "handroll": "0.7.2",
     "jsdom": "9.9.1",
     "mocha": "3.2.0",
-    "requisite": "1.19.1",
     "selenium-standalone": "5.11.1",
     "serve-static": "1.11.2",
-    "shortcake": "1.1.18",
-    "uglify-js": "2.7.5",
+    "shortcake": "1.2.5",
     "webdriverio": "4.6.2"
   },
   "scripts": {
@@ -41,7 +41,6 @@
   },
   "homepage": "https://github.com/hanzo-io/track.js#readme",
   "dependencies": {
-    "cake-publish": "0.1.5",
     "cookies-js": "1.2.3",
     "load-iframe": "^1.0.0",
     "load-script": "^1.0.0",
