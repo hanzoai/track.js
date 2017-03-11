@@ -1,7 +1,7 @@
 {
-  "name": "@hanzo/analytics.js",
+  "name": "track.js",
   "version": "0.2.17",
-  "description": "Analytics support for Hanzo.",
+  "description": "Identify users, capture events and track behavioral data across all popular analytics platforms with a single line of code.",
   "main": "lib",
   "devDependencies": {
     "bebop": "1.9.3",
@@ -21,23 +21,25 @@
     "webdriverio": "4.2.16"
   },
   "scripts": {
-    "prepublish": "node_modules/.bin/cake build",
-    "test": "node_modules/.bin/cake test"
+    "prepublish": "cake build",
+    "test": "cake test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hanzo-io/analytics.js.git"
+    "url": "git+https://github.com/hanzo-io/track.js.git"
   },
   "keywords": [
     "analytics",
+    "tracking",
+    "ecommerce",
     "hanzo"
   ],
-  "author": "\"author\": \"Zach Kelling <zk@hanzo.io> (http://hanzo.io)",
+  "author": "\"author\": \"Hanzo Inc <hi@hanzo.io> (https://hanzo.io)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hanzo-io/analytics.js/issues"
+    "url": "https://github.com/hanzo-io/track.js/issues"
   },
-  "homepage": "https://github.com/hanzo-io/analytics.js#readme",
+  "homepage": "https://github.com/hanzo-io/track.js#readme",
   "dependencies": {
     "cake-publish": "0.1.5",
     "cookies-js": "1.2.2",
