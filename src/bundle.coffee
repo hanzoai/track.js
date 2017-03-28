@@ -1,20 +1,20 @@
+import {Track} from 'track.js'
+
 # Save reference to stub analytics
-stub = window.analytics ? []
+stub = window.track ? []
 
 # Create new analytics instance to replace stub
-window.analytics = analytics = new (require './analytics')
-
-analytics.debug() if stub.debug
-
-# Initialize analytics instance
-analytics.initialize {}
+window.track = new Track {}
 
 # Loop through stub calls and replay them
 while stub.length > 0
-  item = stub.shift()
-  method = item.shift()
-  if analytics[method]?
-    analytics[method].apply analytics, item
+  event = stub.shift()
+  method = event.shift()
+  if track[method]?
+    track[method].apply track, event
+
+# track some event
+track 'foo', a: 1, b: 2
 
 # track this page
-analytics.page()
+track.page()
