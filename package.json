@@ -11,7 +11,7 @@
     "cake-test": "0.1.0",
     "cake-version": "0.1.15",
     "chai": "3.5.0",
-    "coffeescript": "1.12.4",
+    "coffeescript": "1.12.5",
     "connect": "3.6.0",
     "handroll": "0.13.4",
     "jsdom": "9.12.0",
