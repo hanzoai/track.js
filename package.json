@@ -22,8 +22,10 @@
     "webdriverio": "4.6.2"
   },
   "scripts": {
-    "prepublish": "cake build",
-    "test": "cake test"
+    "build": "sake test",
+    "prepublishOnly": "sake build",
+    "pretest": "sake build",
+    "test": "sake test"
   },
   "repository": {
     "type": "git",
@@ -35,8 +37,8 @@
     "ecommerce",
     "hanzo"
   ],
-  "author": "\"author\": \"Hanzo Inc <hi@hanzo.io> (https://hanzo.io)",
-  "license": "MIT",
+  "author": "Hanzo, Inc. <hi@hanzo.io>",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/hanzo-io/track.js/issues"
   },
