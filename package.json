@@ -4,7 +4,7 @@
   "description": "Identify users and track interactions with [Hanzo's](https://hanzo.io) native solution for web analytics.",
   "main": "lib",
   "devDependencies": {
-    "bebop": "1.12.2",
+    "bebop": "1.12.5",
     "sake-bundle": "0.6.0",
     "sake-cli": "0.5.21",
     "sake-core": "1.5.1",
@@ -13,15 +13,15 @@
     "sake-publish": "0.1.16",
     "sake-test": "0.1.5",
     "sake-version": "0.1.19",
-    "chai": "3.5.0",
-    "coffeescript": "1.12.5",
-    "connect": "3.6.0",
-    "handroll": "0.13.4",
-    "jsdom": "9.12.0",
-    "mocha": "3.2.0",
-    "selenium-standalone": "6.2.0",
-    "serve-static": "1.12.1",
-    "webdriverio": "4.6.2"
+    "chai": "4.1.0",
+    "coffeescript": "1.12.7",
+    "connect": "3.6.3",
+    "handroll": "0.15.0",
+    "jsdom": "11.1.0",
+    "mocha": "3.5.0",
+    "selenium-standalone": "6.6.0",
+    "serve-static": "1.12.3",
+    "webdriverio": "4.8.0"
   },
   "scripts": {
     "build": "sake test",
@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/hanzo-io/track.js#readme",
   "dependencies": {
-    "akasha": "0.1.4",
+    "akasha": "0.1.9",
     "load-iframe": "^1.0.0",
     "load-script": "^1.0.0"
   }
