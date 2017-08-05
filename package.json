@@ -14,7 +14,7 @@
     "sake-test": "0.1.5",
     "sake-version": "0.1.19",
     "chai": "4.1.0",
-    "coffeescript": "1.12.7",
+    "coffee-script": "1.12.7",
     "connect": "3.6.3",
     "handroll": "0.15.0",
     "jsdom": "11.1.0",
@@ -47,8 +47,8 @@
   },
   "homepage": "https://github.com/hanzo-io/track.js#readme",
   "dependencies": {
-    "akasha": "0.1.9",
     "load-iframe": "^1.0.0",
-    "load-script": "^1.0.0"
+    "load-script": "^1.0.0",
+    "store": "2.0.12"
   }
 }
