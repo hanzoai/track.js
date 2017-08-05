@@ -1,6 +1,6 @@
-Integration = require '../integration'
+import Integration from '../integration'
 
-module.exports = class Heap extends Integration
+class Heap extends Integration
   src:
     type: 'script'
     url:  -> "//cdn.heapanalytics.com/js/heap-#{@id}.js"
@@ -43,3 +43,5 @@ module.exports = class Heap extends Integration
   identify: (userId, props, cb) ->
     window.identify userId
     window.heap.addUserProperties props
+
+export default Heap

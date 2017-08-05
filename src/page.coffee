@@ -1,7 +1,7 @@
-session = require './session'
-{tld}   = require './utils'
+import session  from './session'
+import { tld }  from './utils'
 
-module.exports =
+page =
   title: -> document.title
 
   referrer: ->
@@ -13,3 +13,5 @@ module.exports =
       @_referrer = ref
     else
       @_referrer = (session.get 'referrer') ? ''
+
+export default page

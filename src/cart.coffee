@@ -1,4 +1,4 @@
-module.exports = ->
+export default cart = ->
   data = Crowdstart?.Shop?.data
   unless data?
     return total: 0, items: [], ids: []

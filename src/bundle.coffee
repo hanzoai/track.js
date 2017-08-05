@@ -1,4 +1,4 @@
-import {Track} from 'track.js'
+import { Track } from 'track.js'
 
 # Save reference to stub analytics
 stub = window.track ? []

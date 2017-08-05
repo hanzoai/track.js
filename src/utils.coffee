@@ -1,4 +1,4 @@
-exports.onload = (el, cb) ->
+export onload = (el, cb) ->
   add = (el, cb) ->
     el.addEventListener 'load', (_, e) ->
       cb null, e
@@ -23,14 +23,14 @@ exports.onload = (el, cb) ->
   else
     attach el, cb
 
-exports.tld = (domain) ->
+export tld = (domain) ->
   match = domain.match /[^.\s\/]+\.([a-z]{3,}|[a-z]{2}.[a-z]{2})$/
   if match?
     match[0]
   else
     domain
 
-exports.safariPrivateBrowsing = ->
+export safariPrivateBrowsing = ->
   try
     localStorage.t = 0
     false
@@ -38,7 +38,7 @@ exports.safariPrivateBrowsing = ->
     true
 
 # http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
-exports.uuid = ->
+export uuid = ->
   lut = []
   for i in [0...256]
     lut[i] = (if i < 16 then '0' else '') + i.toString(16)

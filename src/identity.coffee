@@ -1,5 +1,5 @@
-session = require './session'
-{uuid}  = require './utils'
+import session  from './session'
+import { uuid } from './utils'
 
 class Identity
   constructor: ->
@@ -20,4 +20,6 @@ class Identity
   id: ->
     @userId ? @anonId
 
-module.exports = new Identity
+identity = new Identity
+
+export default identity

@@ -1,6 +1,6 @@
-{onload} = require '../utils'
+import { onload } from '../utils'
 
-module.exports = (opts, cb) ->
+loadScript = (opts, cb) ->
   script = document.createElement 'script'
   onload script, cb
 
@@ -17,3 +17,5 @@ module.exports = (opts, cb) ->
   head.parentNode.insertBefore script, head
 
   script
+
+export default loadScript

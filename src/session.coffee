@@ -1,5 +1,5 @@
-{safariPrivateBrowsing, tld} = require './utils'
-{document, window} = require './browser'
+import {safariPrivateBrowsing, tld} from './utils'
+import {document, window}           from './browser'
 
 # Default session storage
 localStorage = -> require 'store'
@@ -34,4 +34,8 @@ cookies = ->
   clear: ->
     cookies.expire key
 
-module.exports = if safariPrivateBrowsing() then cookies() else localStorage()
+session = if safariPrivateBrowsing() then cookies() else localStorage()
+
+export default session
+
+

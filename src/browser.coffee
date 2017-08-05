@@ -3,6 +3,5 @@ unless window?
   document.domain = 'localhost'
   window   = document.defaultView
 
-module.exports =
-  window:   window
-  document: document
+export window
+export document

@@ -1,8 +1,8 @@
-Integration = require '../integration'
-identity    = require '../identity'
-page        = require '../page'
+import Integration  from '../integration'
+import identity     from '../identity'
+import page         from '../page'
 
-module.exports = class AdRoll extends Integration
+class AdRoll extends Integration
   src:
     type: 'script'
     url:
@@ -32,3 +32,5 @@ module.exports = class AdRoll extends Integration
       adroll_currency:         props.currency ? 'USD'
 
     window.__adroll.record_user data
+
+export default AdRoll

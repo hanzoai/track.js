@@ -1,9 +1,8 @@
-require 'shortcake'
-
-use 'cake-bundle'
-use 'cake-outdated'
-use 'cake-publish'
-use 'cake-version'
+use 'sake-bundle'
+use 'sake-linked'
+use 'sake-outdated'
+use 'sake-publish'
+use 'sake-version'
 
 option '-b', '--browser [browserName]', 'browser to test with'
 option '-g', '--grep [filter]', 'test filter'

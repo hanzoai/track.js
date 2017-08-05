@@ -1,5 +1,5 @@
-Integration = require '../integration'
-cart        = require '../cart'
+import Integration  from '../integration'
+import cart         from '../cart'
 
 parseCurrency = (value) ->
   if typeof value == 'string'
@@ -7,7 +7,7 @@ parseCurrency = (value) ->
   else if typeof value == 'number'
     value.toFixed 2
 
-module.exports = class FacebookPixel extends Integration
+class FacebookPixel extends Integration
   src:
     type: 'script'
     url: '//connect.facebook.net/en_US/fbevents.js'
@@ -142,3 +142,5 @@ module.exports = class FacebookPixel extends Integration
       content_ids:  ids
       num_items: ids.length
     cb null
+
+export default FacebookPixel

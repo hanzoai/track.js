@@ -1,6 +1,6 @@
-{onload} = require '../utils'
+import { onload } from '../utils'
 
-module.exports = (opts, cb) ->
+loadIframe = (opts, cb) ->
   iframe = document.createElement 'iframe'
   onload iframe, cb
 
@@ -13,3 +13,5 @@ module.exports = (opts, cb) ->
   first.parentNode.insertBefore iframe, first
 
   iframe
+
+export default loadIframe

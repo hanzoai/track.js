@@ -1,6 +1,6 @@
-Integration = require '../integration'
+import Integration from '../integration'
 
-module.exports = class FacebookConversions extends Integration
+class FacebookConversions extends Integration
   src:
     type: 'script'
     url: '//connect.facebook.net/en_US/fbds.js';
@@ -28,3 +28,5 @@ module.exports = class FacebookConversions extends Integration
     currency = props.currency ? @opts.currency ? 'USD'
 
     _fbq.push ['track', id, value: value, currency: currency]
+
+export default FacebookConversions

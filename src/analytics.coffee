@@ -1,5 +1,5 @@
-Integration = require './integration'
-page        = require './page'
+import Integration  from './integration'
+import page         from './page'
 
 methodName = (event) ->
   name = event.replace /\s+/g, ''
@@ -10,7 +10,7 @@ normalizeCall = (props = {}, cb = ->) ->
     [props, cb] = [{}, cb]
   [props, cb]
 
-module.exports = class Analytics
+class Analytics
   constructor: ->
     @integrations = []
 
@@ -113,3 +113,5 @@ module.exports = class Analytics
   trackLink:   ->
   trackSubmit: ->
   user:        ->
+
+export default Analytics

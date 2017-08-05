@@ -5,3 +5,4 @@ selenium-server-standalone-2.45.0.jar
 .test
 test/fixtures/snippet.js
 test/fixtures/bundle.js
+package-lock.json

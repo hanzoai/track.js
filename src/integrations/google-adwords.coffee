@@ -1,6 +1,6 @@
-Integration = require '../integration'
+import Integration from '../integration'
 
-module.exports = class GoogleAdWords extends Integration
+class GoogleAdWords extends Integration
   src:
     type: 'script'
     url: '//www.googleadservices.com/pagead/conversion_async.js'
@@ -47,3 +47,5 @@ module.exports = class GoogleAdWords extends Integration
       google_remarketing_only:    false
 
     cb null
+
+export default GoogleAdWords

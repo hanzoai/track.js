@@ -1,9 +1,9 @@
-loadIframe = require './loaders/iframe'
-loadImg    = require './loaders/img'
-loadScript = require './loaders/script'
-sample     = require './sample'
+import loadIframe   from './loaders/iframe'
+import loadImg      from './loaders/img'
+import loadScript   from './loaders/script'
+import sample       from './sample'
 
-module.exports = class Integration
+class Integration
   init: ->
 
   name: -> @opts.type
@@ -34,3 +34,5 @@ module.exports = class Integration
         loadImg @src, cb
       when 'iframe'
         loadIframe @src, cb
+
+export default Integration

@@ -1,6 +1,6 @@
-{onload} = require '../utils'
+import {onload} from '../utils'
 
-module.exports = (opts, cb) ->
+loadImg = (opts, cb) ->
   img = new Image()
   onload img, cb
 
@@ -9,3 +9,5 @@ module.exports = (opts, cb) ->
   img.src = opts.url
 
   img
+
+export default loadImg

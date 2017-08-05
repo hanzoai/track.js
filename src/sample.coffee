@@ -1,6 +1,6 @@
-session = require './session'
+import session from './session'
 
-module.exports = (name, pct = 1) ->
+sample = (name, pct = 1) ->
   key = 'sample:' + name
   if (sampled = (session.get key))?
     return sampled
@@ -11,3 +11,5 @@ module.exports = (name, pct = 1) ->
   else
     session.set key, true
     return true
+
+export default sample

@@ -1,6 +1,6 @@
-Integration = require '../integration'
+import Integration from '../integration'
 
-module.exports = class Bing extends Integration
+class Bing extends Integration
   src:
     type: 'script'
     url:  '//bat.bing.com/bat.js'
@@ -34,3 +34,5 @@ module.exports = class Bing extends Integration
     event.gv ?= props.revenue
 
     window.uetq.push event
+
+export default Bing

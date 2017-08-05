@@ -1,4 +1,4 @@
-Integration = require '../integration'
+import Integration from '../integration'
 
 # Google Analytics only accepts ints as values
 parseValue = (value) ->
@@ -24,7 +24,7 @@ payload = (props = {}) ->
       data[k] = v
   data
 
-module.exports = class GoogleAnalytics extends Integration
+class GoogleAnalytics extends Integration
   src:
     type: 'script'
     url: '//www.google-analytics.com/analytics.js'
@@ -160,3 +160,5 @@ module.exports = class GoogleAnalytics extends Integration
       step:   props.step ? 1
       option: props.option
     cb null
+
+export default GoogleAnalytics
