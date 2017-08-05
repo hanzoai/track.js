@@ -47,6 +47,7 @@
   },
   "homepage": "https://github.com/hanzo-io/track.js#readme",
   "dependencies": {
+    "cookies-js": "1.2.3",
     "load-iframe": "^1.0.0",
     "load-script": "^1.0.0",
     "store": "2.0.12"
