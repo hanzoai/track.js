@@ -1,6 +1,7 @@
 node_modules
 lib/
 phantomjsdriver.log
+.sake
 selenium-server-standalone-2.45.0.jar
 .test
 test/fixtures/snippet.js
