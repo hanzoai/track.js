@@ -7,4 +7,4 @@ Track =
   Integration:  Integration
   Integrations: Integrations
 
-import default Track
+export default Track

@@ -14,7 +14,7 @@
     "sake-test": "0.1.5",
     "sake-version": "0.1.19",
     "chai": "4.1.0",
-    "coffeescript": "1.12.7",
+    "coffee-script": "1.12.7",
     "connect": "3.6.3",
     "handroll": "0.15.0",
     "jsdom": "11.1.0",
